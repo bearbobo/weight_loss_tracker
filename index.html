@@ -6,127 +6,171 @@
 <title>132天减重100计划</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;}
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --green:#3B6D11;--green-light:#EAF3DE;--green-mid:#639922;
+  --amber:#BA7517;--amber-light:#FAEEDA;
+  --teal:#0F6E56;--teal-mid:#1D9E75;
+  --red:#A32D2D;--red-light:#FCEBEB;
+  --bg:#f5f4ef;--surface:#fff;--surface2:#f8f8f5;
+  --text:#1a1a1a;--text2:#666;
+  --border:rgba(0,0,0,0.12);--border2:rgba(0,0,0,0.2);
+}
+@media(prefers-color-scheme:dark){
   :root{
-    --green:#3B6D11;--green-light:#EAF3DE;--green-mid:#639922;
-    --amber:#BA7517;--amber-light:#FAEEDA;
-    --teal:#0F6E56;--teal-mid:#1D9E75;
-    --bg:#f5f4ef;--surface:#fff;--surface2:#f8f8f5;
-    --text:#1a1a1a;--text2:#666;
-    --border:rgba(0,0,0,0.12);--border2:rgba(0,0,0,0.2);
+    --bg:#1a1a18;--surface:#242422;--surface2:#2e2e2b;
+    --text:#f0efea;--text2:#999;
+    --border:rgba(255,255,255,0.1);--border2:rgba(255,255,255,0.18);
+    --green-light:#1a2e0e;--amber-light:#2e1f00;--red-light:#2e0e0e;
   }
-  @media(prefers-color-scheme:dark){
-    :root{
-      --bg:#1a1a18;--surface:#242422;--surface2:#2e2e2b;
-      --text:#f0efea;--text2:#999;
-      --border:rgba(255,255,255,0.1);--border2:rgba(255,255,255,0.18);
-    }
-  }
-  body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
-  .app{max-width:720px;margin:0 auto;padding:1rem;}
+}
+body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+.app{max-width:720px;margin:0 auto;padding:1rem;}
 
-  /* Sync bar */
-  .sync-bar{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border-radius:10px;border:0.5px solid var(--border);padding:8px 14px;margin-bottom:10px;font-size:13px;}
-  .sync-status{display:flex;align-items:center;gap:6px;color:var(--text2);}
-  .sync-dot{width:8px;height:8px;border-radius:50%;background:#ccc;flex-shrink:0;}
-  .sync-dot.ok{background:var(--green-mid);}
-  .sync-dot.err{background:#E24B4A;}
-  .sync-dot.loading{background:var(--amber);animation:pulse 1s infinite;}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-  .sync-btn{padding:4px 12px;border-radius:16px;border:0.5px solid var(--border2);background:transparent;font-size:12px;cursor:pointer;color:var(--text2);font-family:'Noto Sans SC',sans-serif;}
-  .sync-btn:hover{background:var(--surface2);}
+.sync-bar{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border-radius:10px;border:0.5px solid var(--border);padding:8px 14px;margin-bottom:10px;font-size:13px;}
+.sync-status{display:flex;align-items:center;gap:6px;color:var(--text2);}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:#ccc;flex-shrink:0;transition:background 0.3s;}
+.sync-dot.ok{background:var(--green-mid);}
+.sync-dot.err{background:#E24B4A;}
+.sync-dot.loading{background:var(--amber);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.sync-btn{padding:4px 12px;border-radius:16px;border:0.5px solid var(--border2);background:transparent;font-size:12px;cursor:pointer;color:var(--text2);font-family:'Noto Sans SC',sans-serif;}
 
-  .header{background:var(--surface);border-radius:16px;border:0.5px solid var(--border);padding:1.25rem 1.5rem;margin-bottom:1rem;}
-  .header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
-  .header-title{font-size:18px;font-weight:700;color:var(--green);}
-  .header-sub{font-size:13px;color:var(--text2);margin-top:2px;}
-  .countdown-badge{background:var(--green-light);color:var(--green);padding:6px 14px;border-radius:20px;font-size:13px;font-weight:500;white-space:nowrap;}
-  .progress-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:6px;}
-  .progress-bar-bg{background:#E8E8E0;border-radius:8px;height:12px;overflow:hidden;}
-  .progress-bar-fill{background:linear-gradient(90deg,#1D9E75,#97C459);border-radius:8px;height:100%;transition:width 0.6s ease;}
-  .progress-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:1rem;}
-  .stat-card{background:var(--surface2);border-radius:10px;padding:10px;text-align:center;}
-  .stat-val{font-size:18px;font-weight:700;color:var(--text);}
-  .stat-label{font-size:11px;color:var(--text2);margin-top:2px;}
-  .stat-card.highlight .stat-val{color:var(--green);}
+.header{background:var(--surface);border-radius:16px;border:0.5px solid var(--border);padding:1.25rem 1.5rem;margin-bottom:1rem;}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
+.header-title{font-size:18px;font-weight:700;color:var(--green);}
+.header-sub{font-size:13px;color:var(--text2);margin-top:2px;}
+.countdown-badge{background:var(--green-light);color:var(--green);padding:6px 14px;border-radius:20px;font-size:13px;font-weight:500;white-space:nowrap;}
+.progress-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:6px;}
+.progress-bar-bg{background:var(--surface2);border-radius:8px;height:12px;overflow:hidden;border:0.5px solid var(--border);}
+.progress-bar-fill{background:linear-gradient(90deg,#1D9E75,#97C459);border-radius:8px;height:100%;transition:width 0.8s ease;}
+.progress-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:1rem;}
+.stat-card{background:var(--surface2);border-radius:10px;padding:10px;text-align:center;}
+.stat-val{font-size:18px;font-weight:700;color:var(--text);}
+.stat-label{font-size:11px;color:var(--text2);margin-top:2px;}
+.stat-card.highlight .stat-val{color:var(--green);}
 
-  .tabs{display:flex;gap:6px;margin-bottom:1rem;overflow-x:auto;padding-bottom:2px;}
-  .tab{padding:8px 14px;border-radius:20px;border:0.5px solid var(--border);background:var(--surface);font-size:13px;cursor:pointer;white-space:nowrap;color:var(--text2);transition:all 0.2s;font-family:'Noto Sans SC',sans-serif;}
-  .tab.active{background:var(--green);color:#fff;border-color:var(--green);}
+.countdown-timer{display:flex;gap:8px;justify-content:center;margin-top:12px;}
+.timer-block{background:var(--surface2);border-radius:10px;padding:8px 12px;text-align:center;min-width:56px;border:0.5px solid var(--border);}
+.timer-num{font-size:22px;font-weight:700;color:var(--green);line-height:1;}
+.timer-label{font-size:10px;color:var(--text2);margin-top:3px;}
 
-  .panel{display:none;}
-  .panel.active{display:block;}
-  .card{background:var(--surface);border-radius:14px;border:0.5px solid var(--border);padding:1.25rem;margin-bottom:1rem;}
-  .card-title{font-size:14px;font-weight:500;color:var(--text2);margin-bottom:12px;}
+.tabs{display:flex;gap:6px;margin-bottom:1rem;overflow-x:auto;padding-bottom:2px;}
+.tab{padding:8px 14px;border-radius:20px;border:0.5px solid var(--border);background:var(--surface);font-size:13px;cursor:pointer;white-space:nowrap;color:var(--text2);transition:all 0.2s;font-family:'Noto Sans SC',sans-serif;}
+.tab.active{background:var(--green);color:#fff;border-color:var(--green);}
 
-  .motivation-card{background:#E1F5EE;border-radius:14px;padding:1.25rem;margin-bottom:1rem;border:0.5px solid #9FE1CB;}
-  .motivation-text{font-size:15px;font-weight:500;color:var(--teal);line-height:1.6;}
-  .motivation-date{font-size:12px;color:var(--teal-mid);margin-top:6px;opacity:0.7;}
+.panel{display:none;}
+.panel.active{display:block;}
+.card{background:var(--surface);border-radius:14px;border:0.5px solid var(--border);padding:1.25rem;margin-bottom:1rem;}
+.card-title{font-size:14px;font-weight:500;color:var(--text2);margin-bottom:12px;}
 
-  .milestone-list{display:flex;flex-direction:column;gap:8px;}
-  .milestone-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;background:var(--surface2);border:0.5px solid var(--border);}
-  .milestone-item.achieved{background:var(--green-light);border-color:#C0DD97;}
-  .milestone-check{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
-  .milestone-item.achieved .milestone-check{background:var(--green-mid);color:#fff;}
-  .milestone-item:not(.achieved) .milestone-check{background:#E8E8E0;color:var(--text2);}
-  .milestone-info{flex:1;}
-  .milestone-title{font-size:13px;font-weight:500;color:var(--text);}
-  .milestone-eq{font-size:12px;color:var(--text2);margin-top:1px;}
-  .milestone-badge{font-size:11px;padding:3px 8px;border-radius:10px;background:var(--amber-light);color:var(--amber);white-space:nowrap;}
-  .milestone-item.achieved .milestone-badge{background:var(--green-light);color:var(--green);}
+.motivation-card{background:var(--green-light);border-radius:14px;padding:1.25rem;margin-bottom:1rem;border:0.5px solid #9FE1CB;}
+.motivation-text{font-size:15px;font-weight:500;color:var(--teal);line-height:1.6;}
+.motivation-date{font-size:12px;color:var(--teal-mid);margin-top:6px;opacity:0.8;}
 
-  .form-row{margin-bottom:12px;}
-  .form-label{font-size:13px;color:var(--text2);margin-bottom:6px;display:block;}
-  .form-input{width:100%;padding:9px 12px;border-radius:8px;border:0.5px solid var(--border2);background:var(--surface);font-family:'Noto Sans SC',sans-serif;font-size:14px;color:var(--text);}
-  .form-input:focus{outline:none;border-color:var(--green-mid);}
-  textarea.form-input{resize:vertical;min-height:70px;}
-  .btn-primary{width:100%;padding:11px;background:var(--green);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:opacity 0.2s;}
-  .btn-primary:hover{opacity:0.85;}
-  .btn-primary:disabled{opacity:0.5;cursor:not-allowed;}
-  .btn-teal{background:var(--teal);}
+/* Calendar */
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.cal-nav-btn{width:32px;height:32px;border-radius:50%;border:0.5px solid var(--border2);background:transparent;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;color:var(--text);font-family:sans-serif;}
+.cal-nav-btn:hover{background:var(--surface2);}
+.cal-month-title{font-size:15px;font-weight:500;color:var(--text);}
+.cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px;}
+.cal-weekday{text-align:center;font-size:11px;color:var(--text2);padding:4px 0;font-weight:500;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.cal-cell{border-radius:8px;padding:4px 2px;min-height:54px;display:flex;flex-direction:column;align-items:center;cursor:pointer;border:0.5px solid transparent;transition:all 0.15s;position:relative;overflow:hidden;}
+.cal-cell:hover:not(.empty):not(.out-of-range){background:var(--surface2);}
+.cal-cell.empty,.cal-cell.out-of-range{cursor:default;}
+.cal-cell.out-of-range{opacity:0.3;}
+.cal-cell.today{border-color:var(--green-mid) !important;border-width:1.5px !important;}
+.cal-cell.has-log{background:var(--green-light);border-color:#C0DD97;}
+.cal-cell.plan-cell{background:rgba(186,117,23,0.07);border-color:rgba(186,117,23,0.2);}
+.cal-cell.selected{outline:2px solid var(--green);outline-offset:-2px;}
+.cal-day-num{font-size:12px;font-weight:500;color:var(--text2);line-height:1;margin-top:2px;}
+.cal-cell.today .cal-day-num{color:var(--green);font-weight:700;}
+.cal-cell.has-log .cal-day-num{color:var(--green);}
+.cal-weight{font-size:11px;font-weight:700;color:var(--green);margin-top:3px;line-height:1;}
+.cal-change{font-size:9px;margin-top:2px;line-height:1;font-weight:500;}
+.cal-change.up{color:#E24B4A;}
+.cal-change.down{color:var(--green-mid);}
+.cal-plan-w{font-size:9px;color:var(--amber);margin-top:3px;line-height:1.2;text-align:center;}
 
-  .chart-wrapper{position:relative;width:100%;}
+.cal-detail{background:var(--surface2);border-radius:12px;padding:1rem 1.25rem;margin-top:4px;border:0.5px solid var(--border);display:none;}
+.cal-detail.show{display:block;}
+.cal-detail-date{font-size:12px;color:var(--text2);margin-bottom:6px;}
+.cal-detail-weight{font-size:24px;font-weight:700;color:var(--green);line-height:1;}
+.cal-detail-sub{font-size:13px;color:var(--text2);margin-top:4px;}
+.cal-detail-info{font-size:13px;color:var(--text2);margin-top:8px;line-height:1.8;white-space:pre-wrap;}
 
-  .log-entry{padding:12px 0;border-bottom:0.5px solid var(--border);}
-  .log-entry:last-child{border-bottom:none;}
-  .log-date{font-size:12px;color:var(--text2);margin-bottom:4px;}
-  .log-weight{font-size:16px;font-weight:500;color:var(--text);}
-  .log-change{font-size:13px;margin-left:8px;}
-  .log-change.down{color:var(--green-mid);}
-  .log-change.up{color:#E24B4A;}
-  .log-detail{font-size:13px;color:var(--text2);margin-top:4px;line-height:1.5;}
+.cal-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:var(--text2);}
+.cal-legend-item{display:flex;align-items:center;gap:5px;}
+.cal-legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
 
-  .meal-card{background:var(--amber-light);border-radius:12px;padding:1rem;margin-bottom:10px;border:0.5px solid #FAC775;}
-  .meal-type{font-size:12px;color:var(--amber);font-weight:500;margin-bottom:6px;}
-  .meal-name{font-size:14px;font-weight:500;color:#4A2800;margin-bottom:4px;}
-  .meal-desc{font-size:13px;color:#7a4a1a;line-height:1.5;}
-  .meal-cal{font-size:12px;color:var(--amber);margin-top:6px;font-weight:500;}
+.milestone-list{display:flex;flex-direction:column;gap:8px;}
+.milestone-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;background:var(--surface2);border:0.5px solid var(--border);}
+.milestone-item.achieved{background:var(--green-light);border-color:#C0DD97;}
+.milestone-check{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
+.milestone-item.achieved .milestone-check{background:var(--green-mid);color:#fff;}
+.milestone-item:not(.achieved) .milestone-check{background:var(--surface);color:var(--text2);border:0.5px solid var(--border);}
+.milestone-info{flex:1;}
+.milestone-title{font-size:13px;font-weight:500;color:var(--text);}
+.milestone-eq{font-size:12px;color:var(--text2);margin-top:1px;}
+.milestone-badge{font-size:11px;padding:3px 8px;border-radius:10px;background:var(--amber-light);color:var(--amber);white-space:nowrap;}
+.milestone-item.achieved .milestone-badge{background:var(--green-light);color:var(--green);}
 
-  .photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-  .photo-cell{aspect-ratio:1;background:var(--surface2);border-radius:10px;display:flex;align-items:center;justify-content:center;border:0.5px dashed var(--border);overflow:hidden;position:relative;}
-  .photo-cell img{width:100%;height:100%;object-fit:cover;border-radius:10px;}
-  .photo-cell .photo-date{position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:10px;color:#fff;background:rgba(0,0,0,0.45);padding:2px 0;}
+.form-row{margin-bottom:12px;}
+.form-label{font-size:13px;color:var(--text2);margin-bottom:6px;display:block;}
+.form-input{width:100%;padding:9px 12px;border-radius:8px;border:0.5px solid var(--border2);background:var(--surface);font-family:'Noto Sans SC',sans-serif;font-size:14px;color:var(--text);}
+.form-input:focus{outline:none;border-color:var(--green-mid);}
+textarea.form-input{resize:vertical;min-height:70px;}
+.btn-primary{width:100%;padding:11px;background:var(--green);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:opacity 0.2s;}
+.btn-primary:hover{opacity:0.85;}
+.btn-primary:disabled{opacity:0.5;cursor:not-allowed;}
+.btn-teal{background:var(--teal);}
 
-  .achievement-popup{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:12px 20px;border-radius:14px;font-size:14px;font-weight:500;z-index:999;opacity:0;transition:opacity 0.4s;pointer-events:none;max-width:90vw;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.2);}
-  .achievement-popup.show{opacity:1;}
+.chart-wrapper{position:relative;width:100%;}
 
-  .empty{text-align:center;padding:2rem;color:var(--text2);}
-  .empty-icon{font-size:32px;margin-bottom:8px;}
-  .empty-text{font-size:14px;}
-  .loading-spinner{text-align:center;padding:2rem;color:var(--text2);font-size:14px;}
+.log-entry{padding:12px 0;border-bottom:0.5px solid var(--border);}
+.log-entry:last-child{border-bottom:none;}
+.log-date{font-size:12px;color:var(--text2);margin-bottom:4px;}
+.log-weight{font-size:16px;font-weight:500;color:var(--text);}
+.log-change{font-size:13px;margin-left:8px;}
+.log-change.down{color:var(--green-mid);}
+.log-change.up{color:#E24B4A;}
+.log-detail{font-size:13px;color:var(--text2);margin-top:4px;line-height:1.5;}
 
-  @media(max-width:480px){
-    .progress-stats{grid-template-columns:repeat(2,1fr);}
-    .stat-val{font-size:16px;}
-    .app{padding:0.75rem;}
-  }
+.meal-card{background:var(--amber-light);border-radius:12px;padding:1rem;margin-bottom:10px;border:0.5px solid #FAC775;}
+.meal-type{font-size:12px;color:var(--amber);font-weight:500;margin-bottom:6px;}
+.meal-name{font-size:14px;font-weight:500;color:#4A2800;margin-bottom:4px;}
+.meal-desc{font-size:13px;color:#7a4a1a;line-height:1.5;}
+.meal-cal{font-size:12px;color:var(--amber);margin-top:6px;font-weight:500;}
+
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.photo-cell{aspect-ratio:1;background:var(--surface2);border-radius:10px;display:flex;align-items:center;justify-content:center;border:0.5px dashed var(--border);overflow:hidden;position:relative;}
+.photo-cell img{width:100%;height:100%;object-fit:cover;border-radius:10px;}
+.photo-cell .photo-date{position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:10px;color:#fff;background:rgba(0,0,0,0.45);padding:2px 0;}
+
+.achievement-popup{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:12px 20px;border-radius:14px;font-size:14px;font-weight:500;z-index:999;opacity:0;transition:opacity 0.4s;pointer-events:none;max-width:90vw;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.2);}
+.achievement-popup.show{opacity:1;}
+
+.empty{text-align:center;padding:2rem;color:var(--text2);}
+.empty-icon{font-size:32px;margin-bottom:8px;}
+.empty-text{font-size:14px;}
+.loading-spinner{text-align:center;padding:2rem;color:var(--text2);font-size:14px;}
+
+@media(max-width:480px){
+  .progress-stats{grid-template-columns:repeat(2,1fr);}
+  .stat-val{font-size:16px;}
+  .app{padding:0.75rem;}
+  .cal-cell{min-height:46px;}
+  .cal-weight{font-size:10px;}
+  .timer-num{font-size:18px;}
+  .timer-block{min-width:46px;padding:6px 8px;}
+}
 </style>
 </head>
 <body>
 <div class="app">
   <div class="achievement-popup" id="achievePopup"></div>
 
-  <!-- Sync status bar -->
   <div class="sync-bar">
     <div class="sync-status">
       <div class="sync-dot loading" id="syncDot"></div>
@@ -135,7 +179,6 @@
     <button class="sync-btn" onclick="syncAll()">↻ 手动同步</button>
   </div>
 
-  <!-- Header -->
   <div class="header">
     <div class="header-top">
       <div>
@@ -166,23 +209,28 @@
         <div class="stat-label">还差(kg)</div>
       </div>
       <div class="stat-card">
-        <div class="stat-val" id="daysLeftStat">132</div>
-        <div class="stat-label">剩余天数</div>
+        <div class="stat-val" id="avgDayStat">—</div>
+        <div class="stat-label">日均减(kg)</div>
       </div>
+    </div>
+    <div class="countdown-timer">
+      <div class="timer-block"><div class="timer-num" id="timerDays">132</div><div class="timer-label">天</div></div>
+      <div class="timer-block"><div class="timer-num" id="timerHours">00</div><div class="timer-label">时</div></div>
+      <div class="timer-block"><div class="timer-num" id="timerMins">00</div><div class="timer-label">分</div></div>
+      <div class="timer-block"><div class="timer-num" id="timerSecs">00</div><div class="timer-label">秒</div></div>
     </div>
   </div>
 
-  <!-- Tabs -->
   <div class="tabs">
     <button class="tab active" onclick="switchTab('today')">今日</button>
-    <button class="tab" onclick="switchTab('log')">记录</button>
+    <button class="tab" onclick="switchTab('calendar')">日历</button>
     <button class="tab" onclick="switchTab('chart')">曲线</button>
     <button class="tab" onclick="switchTab('milestone')">里程碑</button>
     <button class="tab" onclick="switchTab('meal')">推荐餐</button>
     <button class="tab" onclick="switchTab('photo')">照片墙</button>
   </div>
 
-  <!-- Today -->
+  <!-- TODAY -->
   <div class="panel active" id="panel-today">
     <div class="motivation-card">
       <div style="font-size:20px;margin-bottom:6px;">✨</div>
@@ -190,44 +238,73 @@
       <div class="motivation-date" id="motivationDate"></div>
     </div>
     <div class="card">
-      <div class="card-title">今天的记录</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+        <div class="card-title" style="margin-bottom:0;" id="formCardTitle">今天的记录</div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="font-size:12px;color:var(--text2);">日期</span>
+          <input class="form-input" type="date" id="inputDate" style="width:auto;padding:5px 8px;font-size:13px;" onchange="onDateChange()">
+        </div>
+      </div>
+      <div id="existingHint" style="display:none;background:var(--amber-light);border-radius:8px;padding:8px 12px;margin-bottom:12px;font-size:13px;color:var(--amber);">⚠️ 该日期已有记录，保存后将覆盖原有数据。</div>
       <div class="form-row">
         <label class="form-label">体重 (kg)</label>
-        <input class="form-input" type="number" id="inputWeight" step="0.1" min="50" max="200" placeholder="输入今日体重，例如 135.5">
+        <input class="form-input" type="number" id="inputWeight" step="0.1" min="50" max="200" placeholder="例如 135.5">
       </div>
       <div class="form-row">
         <label class="form-label">饮食记录</label>
-        <textarea class="form-input" id="inputDiet" placeholder="今天吃了什么？例如：早餐燕麦粥+水煮蛋，午餐鸡胸肉沙拉..."></textarea>
+        <textarea class="form-input" id="inputDiet" placeholder="今天吃了什么？早餐燕麦粥+水煮蛋，午餐鸡胸肉沙拉..."></textarea>
       </div>
       <div class="form-row">
         <label class="form-label">运动记录</label>
-        <textarea class="form-input" id="inputExercise" placeholder="今天运动情况？例如：快走40分钟、跳绳300个..."></textarea>
+        <textarea class="form-input" id="inputExercise" placeholder="今天运动情况？快走40分钟、跳绳300个..."></textarea>
       </div>
-      <button class="btn-primary" id="saveBtn" onclick="saveLog()">保存今日记录 ✓</button>
+      <button class="btn-primary" id="saveBtn" onclick="saveLog()">保存记录 ✓</button>
     </div>
   </div>
 
-  <!-- Log -->
-  <div class="panel" id="panel-log">
+  <!-- CALENDAR -->
+  <div class="panel" id="panel-calendar">
     <div class="card">
-      <div class="card-title">历史记录</div>
-      <div id="logHistory"><div class="loading-spinner">加载中...</div></div>
+      <div class="cal-nav">
+        <button class="cal-nav-btn" onclick="calPrev()">&#8249;</button>
+        <div class="cal-month-title" id="calMonthTitle"></div>
+        <button class="cal-nav-btn" onclick="calNext()">&#8250;</button>
+      </div>
+      <div class="cal-weekdays">
+        <div class="cal-weekday">日</div><div class="cal-weekday">一</div>
+        <div class="cal-weekday">二</div><div class="cal-weekday">三</div>
+        <div class="cal-weekday">四</div><div class="cal-weekday">五</div>
+        <div class="cal-weekday">六</div>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+      <div class="cal-legend">
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--green-light);border:1px solid #C0DD97;"></div>已记录体重</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="border:1.5px solid var(--green-mid);background:transparent;"></div>今天</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:rgba(186,117,23,0.1);border:1px solid rgba(186,117,23,0.3);"></div>计划目标</div>
+      </div>
+    </div>
+    <div class="cal-detail" id="calDetail">
+      <div class="cal-detail-date" id="calDetailDate"></div>
+      <div class="cal-detail-weight" id="calDetailWeight"></div>
+      <div class="cal-detail-sub" id="calDetailSub"></div>
+      <div class="cal-detail-info" id="calDetailInfo"></div>
+      <button id="calFillBtn" onclick="fillDateFromCal()" style="display:none;margin-top:10px;padding:8px 16px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:13px;cursor:pointer;font-family:'Noto Sans SC',sans-serif;">✏️ 补录此日</button>
     </div>
   </div>
 
-  <!-- Chart -->
+  <!-- CHART -->
   <div class="panel" id="panel-chart">
     <div class="card">
       <div class="card-title">体重变化曲线</div>
-      <div class="chart-wrapper" style="height:220px;"><canvas id="weightChart" role="img" aria-label="体重变化折线图">体重记录折线图</canvas></div>
+      <div class="chart-wrapper" style="height:230px;"><canvas id="weightChart" role="img" aria-label="体重变化折线图">体重记录折线图</canvas></div>
     </div>
     <div class="card">
-      <div class="card-title">每日减重量（柱状）</div>
+      <div class="card-title">每日变化（柱状）</div>
       <div class="chart-wrapper" style="height:160px;"><canvas id="deltaChart" role="img" aria-label="每日变化柱状图">每日变化图</canvas></div>
     </div>
   </div>
 
-  <!-- Milestone -->
+  <!-- MILESTONE -->
   <div class="panel" id="panel-milestone">
     <div class="card">
       <div class="card-title">减重里程碑</div>
@@ -235,7 +312,7 @@
     </div>
   </div>
 
-  <!-- Meal -->
+  <!-- MEAL -->
   <div class="panel" id="panel-meal">
     <div class="card">
       <div class="card-title">今日推荐减肥餐</div>
@@ -243,7 +320,7 @@
     </div>
   </div>
 
-  <!-- Photo -->
+  <!-- PHOTO -->
   <div class="panel" id="panel-photo">
     <div class="card">
       <div class="card-title">身材记录照片墙</div>
@@ -256,454 +333,418 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-// ─── Supabase config ───────────────────────────────────────────
-const SB_URL = 'https://bgmrqzipgedincqctzvd.supabase.co';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJnbXJxemlwZ2VkaW5jcWN0enZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjU3MzgsImV4cCI6MjA5MjgwMTczOH0.JHxmgO9whH8xR9RB1pOSy5nnTm5k5KPiRaOMNOn8i7M';
-const HEADERS = {'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=representation'};
+const SB_URL='https://bgmrqzipgedincqctzvd.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJnbXJxemlwZ2VkaW5jcWN0enZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjU3MzgsImV4cCI6MjA5MjgwMTczOH0.JHxmgO9whH8xR9RB1pOSy5nnTm5k5KPiRaOMNOn8i7M';
+const SB_H={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=representation'};
 
-async function sbGet(table, params) {
-  const url = SB_URL + '/rest/v1/' + table + '?' + (params || 'order=date.asc');
-  const r = await fetch(url, {headers: HEADERS});
-  if (!r.ok) throw new Error(await r.text());
-  return r.json();
+async function sbGet(t,p){const r=await fetch(SB_URL+'/rest/v1/'+t+'?'+(p||'order=date.asc'),{headers:SB_H});if(!r.ok)throw new Error(await r.text());return r.json();}
+async function sbUpsert(t,d){const r=await fetch(SB_URL+'/rest/v1/'+t,{method:'POST',headers:{...SB_H,'Prefer':'resolution=merge-duplicates,return=representation'},body:JSON.stringify(d)});if(!r.ok)throw new Error(await r.text());return r.json();}
+async function sbInsert(t,d){const r=await fetch(SB_URL+'/rest/v1/'+t,{method:'POST',headers:SB_H,body:JSON.stringify(d)});if(!r.ok)throw new Error(await r.text());return r.json();}
+
+const START_WEIGHT=136,GOAL_WEIGHT=100,TOTAL_DAYS=132,TOTAL_LOSS=36;
+
+const motivations=["每减掉1公斤，就是对自己最好的礼物。你值得更好的自己！","坚持是最好的天赋。今天的汗水，是明天轻盈的翅膀。","不是每天都会有惊喜，但每天都值得努力。继续！","减肥不是惩罚，而是对身体的爱护和尊重。","你已经走过了最难的那一步——开始。接下来只管前进。","36公斤，分成每一天，只需今天比昨天好一点点。","想象穿上帅气的衣服、轻松爬楼梯的那一天，就在眼前。","每一口克制，每一步运动，都是存入健康账户的储蓄。","身体在悄悄改变，即使秤上看不出来，内在已经在变好。","你选择了一条很多人不敢走的路，这本身已经很了不起。","少吃一块蛋糕，多走十分钟，日积月累，便是奇迹。","困难的事情往往最值得做。你在做一件终身受益的事。","今天的坚持，是未来的你感谢现在的你的理由。","体重只是一个数字，但你正在重建的是整个生命状态。","喝足水、睡好觉、动起来——简单的三件事，威力巨大。","想象一下100kg那天的感受！那一天正在向你靠近。","减肥最大的敌人是放弃，而你今天打卡，就已经赢了。","平台期也是进步，身体在悄悄重组，请相信这个过程。","一碗牛肉面，不如一碗杂蔬汤——选择，就是力量。","你比你想象的更有韧性，比你以为的更接近成功。","每天清晨睁开眼，你又比昨天离目标近了一步！","减肥路上不比速度，只比谁坚持得更久。你会赢。","记录本身就是一种自律的力量，今天你做到了。","水是最好的减脂伙伴，每天喝够2升，身体感谢你。","你的身体记得每一次努力，即使大脑觉得没什么变化。","把减肥当成爱好，而不是任务，快乐会加速成功。","今天的你，比一个月前的你更强壮，也更勇敢。","不完美的坚持，胜过完美的放弃。继续打卡！"];
+
+const meals=[{type:"早餐",name:"燕麦蔬菜粥",desc:"大燕麦片50g + 菠菜/生菜 + 水煮蛋1个",cal:"约320大卡"},{type:"午餐",name:"鸡胸肉藜麦碗",desc:"鸡胸肉150g + 藜麦100g + 西兰花/番茄，橄榄油拌",cal:"约480大卡"},{type:"晚餐",name:"清蒸鱼+蒸南瓜",desc:"鲈鱼200g清蒸，南瓜150g蒸熟",cal:"约340大卡"},{type:"早餐",name:"全麦三明治",desc:"全麦吐司2片 + 水煮蛋 + 生菜/番茄 + 低脂奶酪",cal:"约350大卡"},{type:"午餐",name:"豆腐蔬菜汤",desc:"老豆腐200g + 冬瓜/白萝卜 + 虾皮，清汤",cal:"约280大卡"},{type:"晚餐",name:"杂蔬炒瘦肉",desc:"里脊肉100g + 彩椒/芹菜/胡萝卜，少油配糙米",cal:"约420大卡"},{type:"早餐",name:"希腊酸奶+水果",desc:"无糖希腊酸奶200g + 蓝莓50g + 奇亚籽",cal:"约280大卡"},{type:"午餐",name:"水煮牛肉沙拉",desc:"牛腱肉150g + 混合生菜 + 黄瓜番茄，柠檬汁",cal:"约400大卡"},{type:"晚餐",name:"番茄蛋花汤+杂粮馒头",desc:"番茄2个+鸡蛋1个煮汤，配杂粮馒头",cal:"约360大卡"},{type:"早餐",name:"红薯+牛奶",desc:"蒸红薯200g + 低脂牛奶250ml + 少量坚果",cal:"约340大卡"},{type:"午餐",name:"海鲜蔬菜锅",desc:"虾仁/扇贝 + 白菜/豆芽/金针菇，清汤底",cal:"约380大卡"},{type:"晚餐",name:"凉拌豆腐+糙米",desc:"内酯豆腐200g凉拌，配糙米饭小碗",cal:"约350大卡"},{type:"早餐",name:"鸡蛋菜饼",desc:"鸡蛋2个+胡萝卜丝，平底锅少油薄饼",cal:"约300大卡"},{type:"午餐",name:"番茄牛肉炖",desc:"牛腩100g+番茄2个炖烂，配少量红薯",cal:"约450大卡"},{type:"晚餐",name:"凉拌黄瓜+蒸鸡",desc:"黄瓜拍碎凉拌，蒸鸡胸肉120g",cal:"约280大卡"}];
+
+const milestones=[{kg:2,eq:"4盒1升牛奶",emoji:"🥛"},{kg:4,eq:"8盒牛奶，或一个普通书包",emoji:"🎒"},{kg:6,eq:"约12瓶矿泉水",emoji:"💧"},{kg:8,eq:"一个成年鹅的重量",emoji:"🦢"},{kg:10,eq:"两袋5公斤大米！",emoji:"🌾"},{kg:12,eq:"一台笔记本电脑+3本厚书",emoji:"💻"},{kg:15,eq:"三袋5公斤大米，已质变！",emoji:"🏆"},{kg:18,eq:"一个大西瓜+4袋砂糖",emoji:"🍉"},{kg:20,eq:"一个成年柯基犬的体重",emoji:"🐕"},{kg:25,eq:"五袋大米！真正的英雄！",emoji:"⭐"},{kg:30,eq:"一个5岁孩子的体重！",emoji:"👶"},{kg:36,eq:"目标达成！100kg！你做到了！",emoji:"🎉"}];
+
+let logs=[],photos=[],startDate=new Date().toISOString().split('T')[0];
+let calYear,calMonth,calSelected=null;
+
+// ── Countdown timer ──
+function getEndDate(){const s=new Date(startDate);s.setDate(s.getDate()+TOTAL_DAYS);return s;}
+function tickTimer(){
+  const now=new Date(),end=getEndDate();
+  let diff=Math.max(0,end-now);
+  const days=Math.floor(diff/86400000);diff-=days*86400000;
+  const hours=Math.floor(diff/3600000);diff-=hours*3600000;
+  const mins=Math.floor(diff/60000);diff-=mins*60000;
+  const secs=Math.floor(diff/1000);
+  document.getElementById('timerDays').textContent=days;
+  document.getElementById('timerHours').textContent=String(hours).padStart(2,'0');
+  document.getElementById('timerMins').textContent=String(mins).padStart(2,'0');
+  document.getElementById('timerSecs').textContent=String(secs).padStart(2,'0');
+  document.getElementById('countdownBadge').textContent='剩余 '+days+' 天';
 }
 
-async function sbUpsert(table, data) {
-  const r = await fetch(SB_URL + '/rest/v1/' + table, {
-    method: 'POST',
-    headers: {...HEADERS, 'Prefer': 'resolution=merge-duplicates,return=representation'},
-    body: JSON.stringify(data)
-  });
-  if (!r.ok) throw new Error(await r.text());
-  return r.json();
-}
-
-async function sbInsert(table, data) {
-  const r = await fetch(SB_URL + '/rest/v1/' + table, {
-    method: 'POST',
-    headers: HEADERS,
-    body: JSON.stringify(data)
-  });
-  if (!r.ok) throw new Error(await r.text());
-  return r.json();
-}
-
-// ─── Constants ────────────────────────────────────────────────
-const START_WEIGHT = 136;
-const GOAL_WEIGHT = 100;
-const TOTAL_DAYS = 132;
-const TOTAL_LOSS = START_WEIGHT - GOAL_WEIGHT;
-
-const motivations = [
-  "每减掉1公斤，就是对自己最好的礼物。你值得更好的自己！",
-  "坚持是最好的天赋。今天的汗水，是明天轻盈的翅膀。",
-  "不是每天都会有惊喜，但每天都值得努力。继续！",
-  "减肥不是惩罚，而是对身体的爱护和尊重。",
-  "你已经走过了最难的那一步——开始。接下来只管前进。",
-  "36公斤，分成每一天，其实只需要今天比昨天好一点点。",
-  "想象穿上帅气的衣服、轻松爬楼梯的那一天，就在眼前。",
-  "每一口克制，每一步运动，都是存入健康账户的储蓄。",
-  "身体在悄悄改变，即使秤上看不出来，内在已经在变好。",
-  "你选择了一条很多人不敢走的路，这本身已经很了不起。",
-  "少吃一块蛋糕，多走十分钟，日积月累，便是奇迹。",
-  "困难的事情往往最值得做。你在做一件终身受益的事。",
-  "今天的坚持，是未来的你感谢现在的你的理由。",
-  "体重只是一个数字，但你正在重建的是整个生命状态。",
-  "喝足水、睡好觉、动起来——简单的三件事，威力巨大。",
-  "想象一下100kg那天的感受！那一天正在向你靠近。",
-  "减肥最大的敌人是放弃，而你今天来这里打卡，就已经赢了。",
-  "平台期也是进步，身体在悄悄重组，请相信这个过程。",
-  "一碗牛肉面，不如一碗杂蔬汤——选择，就是力量。",
-  "你比你想象的更有韧性，比你以为的更接近成功。",
-  "每天清晨睁开眼，你又比昨天离目标近了一步！",
-  "减肥路上不比速度，只比谁坚持得更久。你会赢。",
-  "记录本身就是一种自律的力量，今天你做到了。",
-  "水是最好的减脂伙伴，每天喝够2升，身体感谢你。",
-  "你的身体记得每一次努力，即使大脑觉得没什么变化。",
-  "把减肥当成爱好，而不是任务，快乐会加速成功。",
-  "今天的你，比一个月前的你更强壮，也更勇敢。",
-  "不完美的坚持，胜过完美的放弃。继续打卡！",
-];
-
-const meals = [
-  {type:"早餐",name:"燕麦蔬菜粥",desc:"大燕麦片50g + 菠菜/生菜适量 + 水煮蛋1个，加少许盐，清淡饱腹",cal:"约320大卡"},
-  {type:"午餐",name:"鸡胸肉藜麦碗",desc:"鸡胸肉150g（烤/煮）+ 藜麦100g + 西兰花/番茄/黄瓜，橄榄油拌",cal:"约480大卡"},
-  {type:"晚餐",name:"清蒸鱼+蒸南瓜",desc:"鲈鱼/草鱼200g清蒸，南瓜150g蒸熟，口感甜糯低卡",cal:"约340大卡"},
-  {type:"早餐",name:"全麦三明治",desc:"全麦吐司2片 + 水煮蛋1个 + 生菜/番茄 + 少量低脂奶酪",cal:"约350大卡"},
-  {type:"午餐",name:"豆腐蔬菜汤",desc:"老豆腐200g + 冬瓜/白萝卜 + 少量虾皮，清汤煮，高蛋白低脂",cal:"约280大卡"},
-  {type:"晚餐",name:"杂蔬炒瘦肉",desc:"里脊肉100g + 彩椒/芹菜/胡萝卜，少油快炒，搭配少量糙米饭",cal:"约420大卡"},
-  {type:"早餐",name:"希腊酸奶+水果",desc:"无糖希腊酸奶200g + 蓝莓/草莓50g + 少量奇亚籽，高蛋白",cal:"约280大卡"},
-  {type:"午餐",name:"水煮牛肉沙拉",desc:"牛腱肉150g水煮切片 + 混合生菜 + 黄瓜番茄，柠檬汁调味",cal:"约400大卡"},
-  {type:"晚餐",name:"番茄蛋花汤+杂粮馒头",desc:"番茄2个+鸡蛋1个煮汤，搭配小个杂粮馒头，温热清淡",cal:"约360大卡"},
-  {type:"早餐",name:"红薯+牛奶",desc:"蒸红薯200g + 低脂牛奶250ml + 少量坚果，营养均衡",cal:"约340大卡"},
-  {type:"午餐",name:"海鲜蔬菜锅",desc:"虾仁/扇贝 + 白菜/豆芽/金针菇，清汤底，低脂高蛋白",cal:"约380大卡"},
-  {type:"晚餐",name:"凉拌豆腐+糙米",desc:"内酯豆腐200g凉拌（酱油+香醋+蒜末），搭配糙米饭小碗",cal:"约350大卡"},
-  {type:"早餐",name:"鸡蛋菜饼",desc:"鸡蛋2个+胡萝卜丝+少量面粉，平底锅薄饼，少油煎制",cal:"约300大卡"},
-  {type:"午餐",name:"番茄牛肉炖",desc:"牛腩100g+番茄2个炖烂，搭配少量红薯，暖胃低卡",cal:"约450大卡"},
-  {type:"晚餐",name:"凉拌黄瓜+蒸鸡",desc:"黄瓜拍碎凉拌，蒸鸡胸肉120g，清爽低热量晚餐",cal:"约280大卡"},
-];
-
-const milestones = [
-  {kg:2,  eq:"4盒1升牛奶（约4公斤重量感）",emoji:"🥛"},
-  {kg:4,  eq:"8盒牛奶，或一个普通书包重",emoji:"🎒"},
-  {kg:6,  eq:"约12瓶矿泉水，身轻如燕！",emoji:"💧"},
-  {kg:8,  eq:"一个成年鹅的重量，恭喜！",emoji:"🦢"},
-  {kg:10, eq:"两袋5公斤大米！超级里程碑！",emoji:"🌾"},
-  {kg:12, eq:"一台笔记本电脑+3本厚书",emoji:"💻"},
-  {kg:15, eq:"三袋5公斤大米，你已质变！",emoji:"🏆"},
-  {kg:18, eq:"一个大西瓜+4袋砂糖",emoji:"🍉"},
-  {kg:20, eq:"一个成年柯基犬的体重！",emoji:"🐕"},
-  {kg:25, eq:"五袋大米！你是真正的英雄！",emoji:"⭐"},
-  {kg:30, eq:"一个5岁孩子的体重！",emoji:"👶"},
-  {kg:36, eq:"目标达成！100kg！你做到了！",emoji:"🎉"},
-];
-
-// ─── State ───────────────────────────────────────────────────
-let logs = [];
-let photos = [];
-let startDate = new Date().toISOString().split('T')[0];
-
-function setSyncStatus(state, text) {
-  const dot = document.getElementById('syncDot');
-  dot.className = 'sync-dot ' + state;
-  document.getElementById('syncText').textContent = text;
-}
-
-// ─── Supabase sync ───────────────────────────────────────────
-async function syncAll() {
-  setSyncStatus('loading', '同步中...');
-  try {
-    // Load start date from config
-    const cfg = await sbGet('wl_config', 'key=eq.startDate&limit=1');
-    if (cfg && cfg.length > 0) {
-      startDate = cfg[0].value;
-    } else {
-      // Save start date
-      await sbUpsert('wl_config', {key: 'startDate', value: startDate});
-    }
-
-    // Load logs
-    const remoteLogs = await sbGet('wl_logs', 'order=date.asc');
-    logs = remoteLogs.map(r => ({date: r.date, weight: parseFloat(r.weight), diet: r.diet || '', exercise: r.exercise || ''}));
-
-    // Load photos
-    const remotePhotos = await sbGet('wl_photos', 'order=created_at.asc');
-    photos = remotePhotos.map(r => ({date: r.date, url: r.url}));
-
-    // Also save to localStorage as cache
-    localStorage.setItem('wl_logs', JSON.stringify(logs));
-    localStorage.setItem('wl_photos', JSON.stringify(photos));
-    localStorage.setItem('wl_startDate', startDate);
-
-    const now = new Date();
-    const timeStr = now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0');
-    setSyncStatus('ok', '已同步 · ' + timeStr);
+// ── Sync ──
+function setSyncStatus(s,t){document.getElementById('syncDot').className='sync-dot '+s;document.getElementById('syncText').textContent=t;}
+async function syncAll(){
+  setSyncStatus('loading','同步中...');
+  try{
+    const cfg=await sbGet('wl_config','key=eq.startDate&limit=1');
+    if(cfg&&cfg.length>0)startDate=cfg[0].value;
+    else await sbUpsert('wl_config',{key:'startDate',value:startDate});
+    const rl=await sbGet('wl_logs','order=date.asc');
+    logs=rl.map(r=>({date:r.date,weight:parseFloat(r.weight),diet:r.diet||'',exercise:r.exercise||''}));
+    const rp=await sbGet('wl_photos','order=created_at.asc');
+    photos=rp.map(r=>({date:r.date,url:r.url}));
+    localStorage.setItem('wl_logs',JSON.stringify(logs));
+    localStorage.setItem('wl_photos',JSON.stringify(photos));
+    localStorage.setItem('wl_startDate',startDate);
+    const t=new Date();
+    setSyncStatus('ok','已同步 · '+t.getHours()+':'+String(t.getMinutes()).padStart(2,'0'));
     updateAll();
-  } catch(e) {
-    console.error('Sync error:', e);
-    // Fallback to localStorage
-    logs = JSON.parse(localStorage.getItem('wl_logs') || '[]');
-    photos = JSON.parse(localStorage.getItem('wl_photos') || '[]');
-    startDate = localStorage.getItem('wl_startDate') || startDate;
-    setSyncStatus('err', '云端连接失败，使用本地数据');
+  }catch(e){
+    console.error(e);
+    logs=JSON.parse(localStorage.getItem('wl_logs')||'[]');
+    photos=JSON.parse(localStorage.getItem('wl_photos')||'[]');
+    startDate=localStorage.getItem('wl_startDate')||startDate;
+    setSyncStatus('err','云端连接失败，使用本地数据');
     updateAll();
   }
 }
 
-// ─── Helpers ─────────────────────────────────────────────────
-function getCurrentWeight() {
-  return logs.length === 0 ? START_WEIGHT : logs[logs.length-1].weight;
-}
+function getCurWeight(){return logs.length===0?START_WEIGHT:logs[logs.length-1].weight;}
+function getDaysElapsed(){const s=new Date(startDate),n=new Date();return Math.min(Math.max(0,Math.floor((n-s)/86400000)),TOTAL_DAYS);}
+function logMap(){const m={};logs.forEach(l=>m[l.date]=l);return m;}
+function plannedWeight(dayIdx){return +(START_WEIGHT-(TOTAL_LOSS/TOTAL_DAYS)*dayIdx).toFixed(1);}
 
-function getDaysElapsed() {
-  const start = new Date(startDate);
-  const now = new Date();
-  return Math.min(Math.floor((now - start) / (1000*60*60*24)), TOTAL_DAYS);
-}
-
-function updateAll() {
-  updateHeader();
-  setMotivation();
-  renderMilestones();
-  renderMeals();
-  const active = document.querySelector('.panel.active');
-  if (active) {
-    const id = active.id.replace('panel-', '');
-    if (id === 'log') renderLog();
-    if (id === 'chart') renderChart();
-    if (id === 'photo') renderPhotos();
+function updateAll(){
+  updateHeader();setMotivation();renderMilestones();renderMeals();
+  const a=document.querySelector('.panel.active');
+  if(a){
+    const id=a.id.replace('panel-','');
+    if(id==='calendar')renderCalendar();
+    if(id==='chart')renderChart();
+    if(id==='photo')renderPhotos();
   }
 }
 
-function updateHeader() {
-  const cw = getCurrentWeight();
-  const lost = +(START_WEIGHT - cw).toFixed(1);
-  const remain = +(cw - GOAL_WEIGHT).toFixed(1);
-  const daysLeft = Math.max(0, TOTAL_DAYS - getDaysElapsed());
-  const pct = Math.min(100, Math.max(0, (lost / TOTAL_LOSS) * 100));
-  document.getElementById('curWeightStat').textContent = cw.toFixed(1);
-  document.getElementById('lostStat').textContent = lost.toFixed(1);
-  document.getElementById('remainStat').textContent = remain > 0 ? remain.toFixed(1) : '0.0';
-  document.getElementById('daysLeftStat').textContent = daysLeft;
-  document.getElementById('countdownBadge').textContent = '剩余 ' + daysLeft + ' 天';
-  document.getElementById('progressFill').style.width = pct.toFixed(1) + '%';
-  document.getElementById('progressLabel').textContent = '已减 ' + lost.toFixed(1) + ' kg（' + pct.toFixed(0) + '%）';
+function updateHeader(){
+  const cw=getCurWeight(),lost=+(START_WEIGHT-cw).toFixed(1),remain=+(cw-GOAL_WEIGHT).toFixed(1);
+  const elapsed=getDaysElapsed(),avg=elapsed>0?(lost/elapsed).toFixed(2):'—';
+  const pct=Math.min(100,Math.max(0,(lost/TOTAL_LOSS)*100));
+  document.getElementById('curWeightStat').textContent=cw.toFixed(1);
+  document.getElementById('lostStat').textContent=lost.toFixed(1);
+  document.getElementById('remainStat').textContent=remain>0?remain.toFixed(1):'0.0';
+  document.getElementById('avgDayStat').textContent=avg;
+  document.getElementById('progressFill').style.width=pct.toFixed(1)+'%';
+  document.getElementById('progressLabel').textContent='已减 '+lost.toFixed(1)+' kg（'+pct.toFixed(0)+'%）';
 }
 
-function setMotivation() {
-  const idx = getDaysElapsed() % motivations.length;
-  document.getElementById('motivationText').textContent = motivations[idx];
-  const now = new Date();
-  document.getElementById('motivationDate').textContent =
-    now.getFullYear() + '年' + (now.getMonth()+1) + '月' + now.getDate() + '日 · 第' + (getDaysElapsed()+1) + '天';
+function setMotivation(){
+  const idx=getDaysElapsed()%motivations.length;
+  document.getElementById('motivationText').textContent=motivations[idx];
+  const n=new Date();
+  document.getElementById('motivationDate').textContent=n.getFullYear()+'年'+(n.getMonth()+1)+'月'+n.getDate()+'日 · 第'+(getDaysElapsed()+1)+'天';
 }
 
-function renderMilestones() {
-  const lost = START_WEIGHT - getCurrentWeight();
-  document.getElementById('milestoneList').innerHTML = milestones.map(m => {
-    const achieved = lost >= m.kg;
-    return '<div class="milestone-item ' + (achieved ? 'achieved' : '') + '">' +
-      '<div class="milestone-check">' + (achieved ? '✓' : '·') + '</div>' +
-      '<div class="milestone-info">' +
-        '<div class="milestone-title">' + m.emoji + ' 减掉 ' + m.kg + ' kg</div>' +
-        '<div class="milestone-eq">' + m.eq + '</div>' +
-      '</div>' +
-      '<div class="milestone-badge">' + (achieved ? '已达成' : '未达成') + '</div>' +
-    '</div>';
-  }).join('');
-}
+// ── Calendar ──
+function initCal(){const n=new Date();calYear=n.getFullYear();calMonth=n.getMonth();}
+function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCalendar();}
+function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCalendar();}
 
-function renderMeals() {
-  const base = (getDaysElapsed() % 5) * 3;
-  document.getElementById('mealContent').innerHTML = [meals[base % meals.length], meals[(base+1) % meals.length], meals[(base+2) % meals.length]].map(m =>
-    '<div class="meal-card">' +
-      '<div class="meal-type">' + m.type + '</div>' +
-      '<div class="meal-name">' + m.name + '</div>' +
-      '<div class="meal-desc">' + m.desc + '</div>' +
-      '<div class="meal-cal">🔥 ' + m.cal + '</div>' +
-    '</div>'
-  ).join('');
-}
+function renderCalendar(){
+  const monthNames=['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+  document.getElementById('calMonthTitle').textContent=calYear+'年 '+monthNames[calMonth];
+  const map=logMap();
+  const startD=new Date(startDate);
+  const endD=getEndDate();
+  const today=new Date().toISOString().split('T')[0];
+  const firstDay=new Date(calYear,calMonth,1).getDay();
+  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
 
-function renderLog() {
-  if (logs.length === 0) {
-    document.getElementById('logHistory').innerHTML = '<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">还没有记录，快去「今日」页添加第一条吧！</div></div>';
-    return;
-  }
-  document.getElementById('logHistory').innerHTML = [...logs].reverse().map((l, i, arr) => {
-    const prev = arr[i+1];
-    let changeHtml = '';
-    if (prev) {
-      const delta = +(l.weight - prev.weight).toFixed(1);
-      changeHtml = '<span class="log-change ' + (delta < 0 ? 'down' : 'up') + '">' + (delta < 0 ? '' : '+') + delta + 'kg</span>';
+  let html='';
+  for(let i=0;i<firstDay;i++) html+='<div class="cal-cell empty"></div>';
+
+  for(let d=1;d<=daysInMonth;d++){
+    const ds=calYear+'-'+String(calMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    const cellDate=new Date(calYear,calMonth,d);
+    const dayIdx=Math.round((cellDate-startD)/86400000);
+    const inRange=dayIdx>=0&&dayIdx<=TOTAL_DAYS;
+    const isToday=ds===today;
+    const hasLog=!!map[ds];
+    const isSel=ds===calSelected;
+
+    let cls='cal-cell';
+    if(!inRange) cls+=' out-of-range';
+    if(hasLog) cls+=' has-log';
+    else if(inRange) cls+=' plan-cell';
+    if(isToday) cls+=' today';
+    if(isSel) cls+=' selected';
+
+    const log=map[ds];
+    let inner='<div class="cal-day-num">'+d+'</div>';
+
+    if(hasLog){
+      inner+='<div class="cal-weight">'+log.weight.toFixed(1)+'</div>';
+      const idx=logs.findIndex(l=>l.date===ds);
+      if(idx>0){
+        const delta=+(log.weight-logs[idx-1].weight).toFixed(1);
+        inner+='<div class="cal-change '+(delta<0?'down':'up')+'">'+(delta<0?'':'+')+(delta===0?'±':'')+delta+'</div>';
+      }
+    } else if(inRange){
+      const pw=plannedWeight(dayIdx);
+      inner+='<div class="cal-plan-w">目标<br>'+pw+'</div>';
     }
-    return '<div class="log-entry">' +
-      '<div class="log-date">' + l.date + '</div>' +
-      '<div class="log-weight">' + l.weight.toFixed(1) + ' kg ' + changeHtml + '</div>' +
-      (l.diet ? '<div class="log-detail">🍽 ' + l.diet + '</div>' : '') +
-      (l.exercise ? '<div class="log-detail">🏃 ' + l.exercise + '</div>' : '') +
-    '</div>';
-  }).join('');
-}
 
-let wChart, dChart;
-function renderChart() {
-  if (logs.length === 0) return;
-  const labels = logs.map(l => l.date.slice(5));
-  const weights = logs.map(l => l.weight);
-  const deltas = logs.map((l, i) => i === 0 ? 0 : +(l.weight - logs[i-1].weight).toFixed(1));
-  const minW = Math.min(...weights, GOAL_WEIGHT) - 1;
-  const maxW = Math.max(...weights, START_WEIGHT) + 1;
-
-  if (wChart) wChart.destroy();
-  wChart = new Chart(document.getElementById('weightChart'), {
-    type: 'line',
-    data: {labels, datasets: [
-      {label:'实际体重', data:weights, borderColor:'#1D9E75', backgroundColor:'rgba(29,158,117,0.1)', tension:0.35, pointRadius:4, pointBackgroundColor:'#1D9E75', fill:true},
-      {label:'目标100kg', data:Array(weights.length).fill(GOAL_WEIGHT), borderColor:'#BA7517', borderDash:[5,4], pointRadius:0}
-    ]},
-    options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{min:minW, max:maxW, ticks:{callback:v=>v+'kg', font:{size:11}}}, x:{ticks:{font:{size:10}, maxRotation:45}}}}
-  });
-
-  if (dChart) dChart.destroy();
-  dChart = new Chart(document.getElementById('deltaChart'), {
-    type: 'bar',
-    data: {labels, datasets:[{label:'日变化', data:deltas, backgroundColor:deltas.map(d=>d<0?'rgba(29,158,117,0.7)':'rgba(226,75,74,0.6)'), borderRadius:4}]},
-    options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{ticks:{callback:v=>v+'kg', font:{size:11}}}, x:{ticks:{font:{size:10}, maxRotation:45}}}}
-  });
-}
-
-function renderPhotos() {
-  const grid = document.getElementById('photoGrid');
-  if (photos.length === 0) {
-    grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty-icon">📷</div><div class="empty-text">还没有照片，记录下你的蜕变旅程吧！</div></div>';
-    return;
+    const oc=inRange?'onclick="onCalClick(\''+ds+'\')"':'';
+    html+='<div class="'+cls+'" '+oc+'>'+inner+'</div>';
   }
-  grid.innerHTML = photos.slice(-9).map(p =>
-    '<div class="photo-cell"><img src="' + p.url + '" alt="' + p.date + '"><div class="photo-date">' + p.date.slice(5) + '</div></div>'
-  ).join('');
-}
+  document.getElementById('calGrid').innerHTML=html;
 
-// ─── Save log ────────────────────────────────────────────────
-async function saveLog() {
-  const w = parseFloat(document.getElementById('inputWeight').value);
-  const diet = document.getElementById('inputDiet').value.trim();
-  const exercise = document.getElementById('inputExercise').value.trim();
-  if (!w || w < 40 || w > 300) { alert('请输入合理的体重（40~300kg）'); return; }
-
-  const btn = document.getElementById('saveBtn');
-  btn.disabled = true;
-  btn.textContent = '保存中...';
-
-  const today = new Date().toISOString().split('T')[0];
-  const prevWeight = logs.length > 0 ? logs[logs.length-1].weight : START_WEIGHT;
-  const entry = {date: today, weight: w, diet, exercise};
-
-  try {
-    await sbUpsert('wl_logs', entry);
-    setSyncStatus('ok', '已同步 · 刚刚');
-  } catch(e) {
-    console.warn('Save to cloud failed, saving locally', e);
-    setSyncStatus('err', '云端保存失败，已存本地');
-  }
-
-  // Update local state
-  const existing = logs.findIndex(l => l.date === today);
-  if (existing >= 0) logs[existing] = entry; else logs.push(entry);
-  localStorage.setItem('wl_logs', JSON.stringify(logs));
-
-  document.getElementById('inputWeight').value = '';
-  document.getElementById('inputDiet').value = '';
-  document.getElementById('inputExercise').value = '';
-  btn.disabled = false;
-  btn.textContent = '保存今日记录 ✓';
-
-  updateHeader();
-  renderLog();
-  renderMilestones();
-
-  const totalLost = +(START_WEIGHT - w).toFixed(1);
-  const newMilestone = milestones.find(m => totalLost >= m.kg && (START_WEIGHT - prevWeight) < m.kg);
-  if (newMilestone) {
-    showAchievement('🎉 里程碑达成！已减 ' + newMilestone.kg + 'kg！' + newMilestone.emoji + ' ' + newMilestone.eq);
+  if(calSelected){
+    if(map[calSelected]) showCalDetail(calSelected,map[calSelected]);
+    else showCalDetailPlan(calSelected);
   } else {
-    showAchievement('✓ 记录成功！今日 ' + w.toFixed(1) + 'kg，累计减 ' + totalLost.toFixed(1) + 'kg！');
+    document.getElementById('calDetail').classList.remove('show');
   }
 }
 
-// ─── Photo upload via Supabase Storage ───────────────────────
-async function handlePhoto(e) {
-  const file = e.target.files[0];
-  if (!file) return;
+function onCalClick(ds){calSelected=ds;renderCalendar();}
 
-  const btn = document.getElementById('photoBtn');
-  btn.disabled = true;
-  btn.textContent = '上传中...';
+function showCalDetail(ds,log){
+  const startD=new Date(startDate),cellDate=new Date(ds);
+  const dayIdx=Math.round((cellDate-startD)/86400000)+1;
+  const lost=+(START_WEIGHT-log.weight).toFixed(1);
+  const pw=plannedWeight(dayIdx-1);
+  const diff=+(log.weight-pw).toFixed(1);
 
-  try {
-    const today = new Date().toISOString().split('T')[0];
-    // Compress first
-    const compressed = await compressImageToBlob(file, 1000);
-    // Unique filename: date + timestamp
-    const filename = today + '_' + Date.now() + '.jpg';
+  document.getElementById('calDetailDate').textContent=ds+'  第'+dayIdx+'天';
+  document.getElementById('calDetailWeight').textContent=log.weight.toFixed(1)+' kg';
 
-    // Upload to Supabase Storage
-    const uploadRes = await fetch(
-      SB_URL + '/storage/v1/object/wl-photos/' + filename,
-      {
-        method: 'POST',
-        headers: {
-          'apikey': SB_KEY,
-          'Authorization': 'Bearer ' + SB_KEY,
-          'Content-Type': 'image/jpeg',
-          'x-upsert': 'true'
-        },
-        body: compressed
-      }
-    );
+  const idx=logs.findIndex(l=>l.date===ds);
+  let sub='累计已减 '+lost.toFixed(1)+' kg';
+  if(idx>0){const delta=+(log.weight-logs[idx-1].weight).toFixed(1);sub+='  较前日 '+(delta<0?delta:'+'+delta)+' kg';}
+  sub+='  vs计划 '+(diff<0?diff:'+'+diff)+' kg';
+  document.getElementById('calDetailSub').textContent=sub;
 
-    if (!uploadRes.ok) {
-      const err = await uploadRes.text();
-      throw new Error(err);
-    }
-
-    // Public URL
-    const publicUrl = SB_URL + '/storage/v1/object/public/wl-photos/' + filename;
-    const entry = {date: today, url: publicUrl};
-
-    // Save URL to wl_photos table
-    await sbInsert('wl_photos', entry);
-
-    photos.push(entry);
-    localStorage.setItem('wl_photos', JSON.stringify(photos));
-    renderPhotos();
-    setSyncStatus('ok', '照片已同步 · 刚刚');
-    showAchievement('📷 照片上传成功！电脑手机都能看！');
-  } catch(err) {
-    console.error('Photo upload error:', err);
-    setSyncStatus('err', '照片上传失败：' + (err.message || '未知错误'));
-    alert('照片上传失败，请检查网络后重试。\n' + (err.message || ''));
-  }
-
-  btn.disabled = false;
-  btn.textContent = '添加今日照片 +';
-  e.target.value = '';
+  let info='';
+  if(log.diet) info+='🍽 '+log.diet+'\n';
+  if(log.exercise) info+='🏃 '+log.exercise;
+  document.getElementById('calDetailInfo').textContent=info;
+  // Show edit button (re-edit existing)
+  const btn=document.getElementById('calFillBtn');
+  btn.textContent='✏️ 编辑此日记录';btn.style.display='inline-block';
+  document.getElementById('calDetail').classList.add('show');
 }
 
-function compressImageToBlob(file, maxSize) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    const url = URL.createObjectURL(file);
-    img.onload = () => {
-      URL.revokeObjectURL(url);
-      const canvas = document.createElement('canvas');
-      let w = img.width, h = img.height;
-      if (w > maxSize || h > maxSize) {
-        if (w > h) { h = Math.round(h * maxSize / w); w = maxSize; }
-        else { w = Math.round(w * maxSize / h); h = maxSize; }
-      }
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      canvas.toBlob(blob => {
-        if (blob) resolve(blob);
-        else reject(new Error('图片压缩失败'));
-      }, 'image/jpeg', 0.82);
-    };
-    img.onerror = () => reject(new Error('图片读取失败'));
-    img.src = url;
+function showCalDetailPlan(ds){
+  const startD=new Date(startDate),cellDate=new Date(ds);
+  const dayIdx=Math.round((cellDate-startD)/86400000);
+  const pw=plannedWeight(dayIdx);
+  document.getElementById('calDetailDate').textContent=ds;
+  document.getElementById('calDetailWeight').textContent='暂无记录';
+  document.getElementById('calDetailSub').textContent='';
+  document.getElementById('calDetailInfo').textContent='计划目标体重：'+pw+' kg';
+  // Show backfill button
+  const btn=document.getElementById('calFillBtn');
+  btn.textContent='📅 补录此日';btn.style.display='inline-block';
+  document.getElementById('calDetail').classList.add('show');
+}
+
+function fillDateFromCal(){
+  if(calSelected) fillDateForm(calSelected);
+}
+
+// ── Milestones ──
+function renderMilestones(){
+  const lost=START_WEIGHT-getCurWeight();
+  document.getElementById('milestoneList').innerHTML=milestones.map(m=>{
+    const a=lost>=m.kg;
+    return '<div class="milestone-item '+(a?'achieved':'')+'">'+
+      '<div class="milestone-check">'+(a?'✓':'·')+'</div>'+
+      '<div class="milestone-info"><div class="milestone-title">'+m.emoji+' 减掉 '+m.kg+' kg</div><div class="milestone-eq">≈ '+m.eq+'</div></div>'+
+      '<div class="milestone-badge">'+(a?'已达成':'未达成')+'</div></div>';
+  }).join('');
+}
+
+// ── Meals ──
+function renderMeals(){
+  const base=(getDaysElapsed()%5)*3;
+  document.getElementById('mealContent').innerHTML=[meals[base%meals.length],meals[(base+1)%meals.length],meals[(base+2)%meals.length]].map(m=>
+    '<div class="meal-card"><div class="meal-type">'+m.type+'</div><div class="meal-name">'+m.name+'</div><div class="meal-desc">'+m.desc+'</div><div class="meal-cal">🔥 '+m.cal+'</div></div>'
+  ).join('');
+}
+
+// ── Chart ──
+let wChart,dChart;
+function renderChart(){
+  if(logs.length===0) return;
+  const labels=logs.map(l=>l.date.slice(5));
+  const weights=logs.map(l=>l.weight);
+  const deltas=logs.map((l,i)=>i===0?0:+(l.weight-logs[i-1].weight).toFixed(1));
+  const planLine=logs.map(l=>{
+    const s=new Date(startDate),c=new Date(l.date);
+    return plannedWeight(Math.round((c-s)/86400000));
+  });
+  const minW=Math.min(...weights,GOAL_WEIGHT)-1,maxW=Math.max(...weights,START_WEIGHT)+1;
+  if(wChart)wChart.destroy();
+  wChart=new Chart(document.getElementById('weightChart'),{
+    type:'line',
+    data:{labels,datasets:[
+      {label:'实际体重',data:weights,borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,0.08)',tension:0.35,pointRadius:4,pointBackgroundColor:'#1D9E75',fill:true},
+      {label:'计划曲线',data:planLine,borderColor:'#BA7517',borderDash:[5,4],pointRadius:0,tension:0,fill:false},
+      {label:'目标100kg',data:Array(weights.length).fill(GOAL_WEIGHT),borderColor:'#E24B4A',borderDash:[2,4],pointRadius:0}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,labels:{boxWidth:10,font:{size:11}}}},
+      scales:{y:{min:minW,max:maxW,ticks:{callback:v=>v+'kg',font:{size:11}}},x:{ticks:{font:{size:10},maxRotation:45}}}}
+  });
+  if(dChart)dChart.destroy();
+  dChart=new Chart(document.getElementById('deltaChart'),{
+    type:'bar',
+    data:{labels,datasets:[{label:'日变化',data:deltas,backgroundColor:deltas.map(d=>d<0?'rgba(29,158,117,0.7)':'rgba(226,75,74,0.6)'),borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{y:{ticks:{callback:v=>v+'kg',font:{size:11}}},x:{ticks:{font:{size:10},maxRotation:45}}}}
   });
 }
 
-// ─── UI helpers ──────────────────────────────────────────────
-function showAchievement(msg) {
-  const el = document.getElementById('achievePopup');
-  el.textContent = msg;
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 3500);
+// ── Photos ──
+function renderPhotos(){
+  const g=document.getElementById('photoGrid');
+  if(photos.length===0){g.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="empty-icon">📷</div><div class="empty-text">还没有照片，记录下你的蜕变旅程吧！</div></div>';return;}
+  g.innerHTML=photos.slice(-9).map(p=>'<div class="photo-cell"><img src="'+p.url+'" alt="'+p.date+'"><div class="photo-date">'+p.date.slice(5)+'</div></div>').join('');
 }
 
-function switchTab(tab) {
-  const tabs = ['today','log','chart','milestone','meal','photo'];
-  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', tabs[i] === tab));
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('panel-' + tab).classList.add('active');
-  if (tab === 'chart') setTimeout(renderChart, 100);
-  if (tab === 'log') renderLog();
-  if (tab === 'photo') renderPhotos();
+// ── Date picker helpers ──
+function initDatePicker(){
+  const today=new Date().toISOString().split('T')[0];
+  const el=document.getElementById('inputDate');
+  el.value=today;
+  el.max=today;
+  el.min=startDate;
 }
 
-// ─── Init ────────────────────────────────────────────────────
-// Load from localStorage first for instant render
-logs = JSON.parse(localStorage.getItem('wl_logs') || '[]');
-photos = JSON.parse(localStorage.getItem('wl_photos') || '[]');
-startDate = localStorage.getItem('wl_startDate') || startDate;
+function onDateChange(){
+  const ds=document.getElementById('inputDate').value;
+  const today=new Date().toISOString().split('T')[0];
+  const isToday=ds===today;
+  document.getElementById('formCardTitle').textContent=isToday?'今天的记录':'补录：'+ds;
+  // Check if existing record
+  const map=logMap();
+  const existing=map[ds];
+  const hint=document.getElementById('existingHint');
+  if(existing){
+    hint.style.display='block';
+    // Pre-fill existing values
+    document.getElementById('inputWeight').value=existing.weight;
+    document.getElementById('inputDiet').value=existing.diet||'';
+    document.getElementById('inputExercise').value=existing.exercise||'';
+  } else {
+    hint.style.display='none';
+    document.getElementById('inputWeight').value='';
+    document.getElementById('inputDiet').value='';
+    document.getElementById('inputExercise').value='';
+  }
+}
+
+// Jump to a specific date from calendar
+function fillDateForm(ds){
+  switchTab('today');
+  const el=document.getElementById('inputDate');
+  el.value=ds;
+  onDateChange();
+  // Scroll to form
+  setTimeout(()=>document.getElementById('panel-today').scrollIntoView({behavior:'smooth'}),100);
+}
+
+// ── Save log ──
+async function saveLog(){
+  const w=parseFloat(document.getElementById('inputWeight').value);
+  const diet=document.getElementById('inputDiet').value.trim();
+  const exercise=document.getElementById('inputExercise').value.trim();
+  if(!w||w<40||w>300){alert('请输入合理的体重（40~300kg）');return;}
+  const targetDate=document.getElementById('inputDate').value||new Date().toISOString().split('T')[0];
+  const btn=document.getElementById('saveBtn');
+  btn.disabled=true;btn.textContent='保存中...';
+  const prevWeight=logs.length>0?logs[logs.length-1].weight:START_WEIGHT;
+  const entry={date:targetDate,weight:w,diet,exercise};
+  try{await sbUpsert('wl_logs',entry);setSyncStatus('ok','已同步 · 刚刚');}
+  catch(e){console.warn(e);setSyncStatus('err','云端保存失败，已存本地');}
+  const ei=logs.findIndex(l=>l.date===targetDate);
+  if(ei>=0)logs[ei]=entry;else{logs.push(entry);logs.sort((a,b)=>a.date.localeCompare(b.date));}
+  localStorage.setItem('wl_logs',JSON.stringify(logs));
+  // Reset form to today
+  const today=new Date().toISOString().split('T')[0];
+  document.getElementById('inputDate').value=today;
+  document.getElementById('inputWeight').value='';
+  document.getElementById('inputDiet').value='';
+  document.getElementById('inputExercise').value='';
+  document.getElementById('existingHint').style.display='none';
+  document.getElementById('formCardTitle').textContent='今天的记录';
+  btn.disabled=false;btn.textContent='保存记录 ✓';
+  updateHeader();renderMilestones();
+  if(document.getElementById('panel-calendar').classList.contains('active'))renderCalendar();
+  const today2=new Date().toISOString().split('T')[0];
+  const isBackfill=targetDate!==today2;
+  const tl=+(START_WEIGHT-w).toFixed(1);
+  const nm=milestones.find(m=>tl>=m.kg&&(START_WEIGHT-prevWeight)<m.kg);
+  if(nm)showAchievement('🎉 里程碑达成！已减'+nm.kg+'kg！'+nm.emoji+' '+nm.eq);
+  else if(isBackfill)showAchievement('📅 补录成功！'+targetDate+' 体重'+w.toFixed(1)+'kg');
+  else showAchievement('✓ 已记录！今日'+w.toFixed(1)+'kg，累计减'+tl.toFixed(1)+'kg！');
+}
+
+// ── Photo upload ──
+async function handlePhoto(e){
+  const file=e.target.files[0];if(!file)return;
+  const btn=document.getElementById('photoBtn');btn.disabled=true;btn.textContent='上传中...';
+  try{
+    const today=new Date().toISOString().split('T')[0];
+    const compressed=await compressImageToBlob(file,1000);
+    const filename=today+'_'+Date.now()+'.jpg';
+    const up=await fetch(SB_URL+'/storage/v1/object/wl-photos/'+filename,{
+      method:'POST',headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'image/jpeg','x-upsert':'true'},body:compressed
+    });
+    if(!up.ok)throw new Error(await up.text());
+    const url=SB_URL+'/storage/v1/object/public/wl-photos/'+filename;
+    const entry={date:today,url};
+    await sbInsert('wl_photos',entry);
+    photos.push(entry);
+    localStorage.setItem('wl_photos',JSON.stringify(photos));
+    renderPhotos();setSyncStatus('ok','照片已同步 · 刚刚');
+    showAchievement('📷 照片上传成功！电脑手机都能看！');
+  }catch(err){
+    console.error(err);setSyncStatus('err','照片上传失败');
+    alert('照片上传失败，请检查网络后重试。\n'+err.message);
+  }
+  btn.disabled=false;btn.textContent='添加今日照片 +';e.target.value='';
+}
+
+function compressImageToBlob(file,maxSize){
+  return new Promise((res,rej)=>{
+    const img=new Image(),url=URL.createObjectURL(file);
+    img.onload=()=>{
+      URL.revokeObjectURL(url);
+      const c=document.createElement('canvas');
+      let w=img.width,h=img.height;
+      if(w>maxSize||h>maxSize){if(w>h){h=Math.round(h*maxSize/w);w=maxSize;}else{w=Math.round(w*maxSize/h);h=maxSize;}}
+      c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
+      c.toBlob(b=>{if(b)res(b);else rej(new Error('压缩失败'));},'image/jpeg',0.82);
+    };
+    img.onerror=()=>rej(new Error('图片读取失败'));img.src=url;
+  });
+}
+
+function showAchievement(msg){
+  const el=document.getElementById('achievePopup');
+  el.textContent=msg;el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),3500);
+}
+
+function switchTab(tab){
+  const names=['today','calendar','chart','milestone','meal','photo'];
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',names[i]===tab));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+tab).classList.add('active');
+  if(tab==='calendar')renderCalendar();
+  if(tab==='chart')setTimeout(renderChart,100);
+  if(tab==='photo')renderPhotos();
+}
+
+// ── Init ──
+logs=JSON.parse(localStorage.getItem('wl_logs')||'[]');
+photos=JSON.parse(localStorage.getItem('wl_photos')||'[]');
+startDate=localStorage.getItem('wl_startDate')||startDate;
+initCal();
 updateAll();
-
-// Then sync from cloud
+tickTimer();
+setInterval(tickTimer,1000);
+initDatePicker();
 syncAll();
-
-// Auto-sync every 5 minutes
-setInterval(syncAll, 5 * 60 * 1000);
+setInterval(syncAll,5*60*1000);
 </script>
 </body>
 </html>
