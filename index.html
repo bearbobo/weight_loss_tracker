@@ -4,16 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>132天减重100计划</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   *{box-sizing:border-box;margin:0;padding:0;}
   :root{
     --green:#3B6D11;--green-light:#EAF3DE;--green-mid:#639922;
     --amber:#BA7517;--amber-light:#FAEEDA;
-    --teal:#0F6E56;--teal-light:#E1F5EEE;--teal-mid:#1D9E75;
-    --coral:#993C1D;--coral-light:#FAECE7;
-    --gray:#5F5E5A;--gray-light:#F1EFE8;
+    --teal:#0F6E56;--teal-mid:#1D9E75;
     --bg:#f5f4ef;--surface:#fff;--surface2:#f8f8f5;
     --text:#1a1a1a;--text2:#666;
     --border:rgba(0,0,0,0.12);--border2:rgba(0,0,0,0.2);
@@ -28,14 +25,24 @@
   body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
   .app{max-width:720px;margin:0 auto;padding:1rem;}
 
+  /* Sync bar */
+  .sync-bar{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border-radius:10px;border:0.5px solid var(--border);padding:8px 14px;margin-bottom:10px;font-size:13px;}
+  .sync-status{display:flex;align-items:center;gap:6px;color:var(--text2);}
+  .sync-dot{width:8px;height:8px;border-radius:50%;background:#ccc;flex-shrink:0;}
+  .sync-dot.ok{background:var(--green-mid);}
+  .sync-dot.err{background:#E24B4A;}
+  .sync-dot.loading{background:var(--amber);animation:pulse 1s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+  .sync-btn{padding:4px 12px;border-radius:16px;border:0.5px solid var(--border2);background:transparent;font-size:12px;cursor:pointer;color:var(--text2);font-family:'Noto Sans SC',sans-serif;}
+  .sync-btn:hover{background:var(--surface2);}
+
   .header{background:var(--surface);border-radius:16px;border:0.5px solid var(--border);padding:1.25rem 1.5rem;margin-bottom:1rem;}
   .header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
   .header-title{font-size:18px;font-weight:700;color:var(--green);}
   .header-sub{font-size:13px;color:var(--text2);margin-top:2px;}
   .countdown-badge{background:var(--green-light);color:var(--green);padding:6px 14px;border-radius:20px;font-size:13px;font-weight:500;white-space:nowrap;}
-
   .progress-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:6px;}
-  .progress-bar-bg{background:var(--gray-light);border-radius:8px;height:12px;overflow:hidden;}
+  .progress-bar-bg{background:#E8E8E0;border-radius:8px;height:12px;overflow:hidden;}
   .progress-bar-fill{background:linear-gradient(90deg,#1D9E75,#97C459);border-radius:8px;height:100%;transition:width 0.6s ease;}
   .progress-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:1rem;}
   .stat-card{background:var(--surface2);border-radius:10px;padding:10px;text-align:center;}
@@ -53,7 +60,6 @@
   .card-title{font-size:14px;font-weight:500;color:var(--text2);margin-bottom:12px;}
 
   .motivation-card{background:#E1F5EE;border-radius:14px;padding:1.25rem;margin-bottom:1rem;border:0.5px solid #9FE1CB;}
-  .motivation-icon{font-size:20px;margin-bottom:6px;}
   .motivation-text{font-size:15px;font-weight:500;color:var(--teal);line-height:1.6;}
   .motivation-date{font-size:12px;color:var(--teal-mid);margin-top:6px;opacity:0.7;}
 
@@ -62,7 +68,7 @@
   .milestone-item.achieved{background:var(--green-light);border-color:#C0DD97;}
   .milestone-check{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
   .milestone-item.achieved .milestone-check{background:var(--green-mid);color:#fff;}
-  .milestone-item:not(.achieved) .milestone-check{background:var(--gray-light);color:var(--text2);}
+  .milestone-item:not(.achieved) .milestone-check{background:#E8E8E0;color:var(--text2);}
   .milestone-info{flex:1;}
   .milestone-title{font-size:13px;font-weight:500;color:var(--text);}
   .milestone-eq{font-size:12px;color:var(--text2);margin-top:1px;}
@@ -76,7 +82,8 @@
   textarea.form-input{resize:vertical;min-height:70px;}
   .btn-primary{width:100%;padding:11px;background:var(--green);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:opacity 0.2s;}
   .btn-primary:hover{opacity:0.85;}
-  .btn-primary.teal{background:var(--teal);}
+  .btn-primary:disabled{opacity:0.5;cursor:not-allowed;}
+  .btn-teal{background:var(--teal);}
 
   .chart-wrapper{position:relative;width:100%;}
 
@@ -96,8 +103,9 @@
   .meal-cal{font-size:12px;color:var(--amber);margin-top:6px;font-weight:500;}
 
   .photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-  .photo-cell{aspect-ratio:1;background:var(--surface2);border-radius:10px;display:flex;align-items:center;justify-content:center;border:0.5px dashed var(--border);cursor:pointer;overflow:hidden;}
+  .photo-cell{aspect-ratio:1;background:var(--surface2);border-radius:10px;display:flex;align-items:center;justify-content:center;border:0.5px dashed var(--border);overflow:hidden;position:relative;}
   .photo-cell img{width:100%;height:100%;object-fit:cover;border-radius:10px;}
+  .photo-cell .photo-date{position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:10px;color:#fff;background:rgba(0,0,0,0.45);padding:2px 0;}
 
   .achievement-popup{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:12px 20px;border-radius:14px;font-size:14px;font-weight:500;z-index:999;opacity:0;transition:opacity 0.4s;pointer-events:none;max-width:90vw;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.2);}
   .achievement-popup.show{opacity:1;}
@@ -105,6 +113,7 @@
   .empty{text-align:center;padding:2rem;color:var(--text2);}
   .empty-icon{font-size:32px;margin-bottom:8px;}
   .empty-text{font-size:14px;}
+  .loading-spinner{text-align:center;padding:2rem;color:var(--text2);font-size:14px;}
 
   @media(max-width:480px){
     .progress-stats{grid-template-columns:repeat(2,1fr);}
@@ -116,6 +125,15 @@
 <body>
 <div class="app">
   <div class="achievement-popup" id="achievePopup"></div>
+
+  <!-- Sync status bar -->
+  <div class="sync-bar">
+    <div class="sync-status">
+      <div class="sync-dot loading" id="syncDot"></div>
+      <span id="syncText">正在连接云端...</span>
+    </div>
+    <button class="sync-btn" onclick="syncAll()">↻ 手动同步</button>
+  </div>
 
   <!-- Header -->
   <div class="header">
@@ -167,7 +185,7 @@
   <!-- Today -->
   <div class="panel active" id="panel-today">
     <div class="motivation-card">
-      <div class="motivation-icon">✨</div>
+      <div style="font-size:20px;margin-bottom:6px;">✨</div>
       <div class="motivation-text" id="motivationText">今天也要元气满满！每一步都是向目标靠近的一步。</div>
       <div class="motivation-date" id="motivationDate"></div>
     </div>
@@ -185,7 +203,7 @@
         <label class="form-label">运动记录</label>
         <textarea class="form-input" id="inputExercise" placeholder="今天运动情况？例如：快走40分钟、跳绳300个..."></textarea>
       </div>
-      <button class="btn-primary" onclick="saveLog()">保存今日记录 ✓</button>
+      <button class="btn-primary" id="saveBtn" onclick="saveLog()">保存今日记录 ✓</button>
     </div>
   </div>
 
@@ -193,7 +211,7 @@
   <div class="panel" id="panel-log">
     <div class="card">
       <div class="card-title">历史记录</div>
-      <div id="logHistory"><div class="empty"><div class="empty-icon">📋</div><div class="empty-text">还没有记录，快去「今日」页添加第一条吧！</div></div></div>
+      <div id="logHistory"><div class="loading-spinner">加载中...</div></div>
     </div>
   </div>
 
@@ -229,15 +247,48 @@
   <div class="panel" id="panel-photo">
     <div class="card">
       <div class="card-title">身材记录照片墙</div>
-      <div class="photo-grid" id="photoGrid"></div>
+      <div class="photo-grid" id="photoGrid"><div class="loading-spinner" style="grid-column:1/-1">加载中...</div></div>
       <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="handlePhoto(event)">
-      <button class="btn-primary teal" style="margin-top:12px;" onclick="document.getElementById('photoInput').click()">添加今日照片 +</button>
+      <button class="btn-primary btn-teal" id="photoBtn" style="margin-top:12px;" onclick="document.getElementById('photoInput').click()">添加今日照片 +</button>
     </div>
   </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
+// ─── Supabase config ───────────────────────────────────────────
+const SB_URL = 'https://bgmrqzipgedincqctzvd.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJnbXJxemlwZ2VkaW5jcWN0enZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjU3MzgsImV4cCI6MjA5MjgwMTczOH0.JHxmgO9whH8xR9RB1pOSy5nnTm5k5KPiRaOMNOn8i7M';
+const HEADERS = {'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=representation'};
+
+async function sbGet(table, params) {
+  const url = SB_URL + '/rest/v1/' + table + '?' + (params || 'order=date.asc');
+  const r = await fetch(url, {headers: HEADERS});
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+
+async function sbUpsert(table, data) {
+  const r = await fetch(SB_URL + '/rest/v1/' + table, {
+    method: 'POST',
+    headers: {...HEADERS, 'Prefer': 'resolution=merge-duplicates,return=representation'},
+    body: JSON.stringify(data)
+  });
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+
+async function sbInsert(table, data) {
+  const r = await fetch(SB_URL + '/rest/v1/' + table, {
+    method: 'POST',
+    headers: HEADERS,
+    body: JSON.stringify(data)
+  });
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+
+// ─── Constants ────────────────────────────────────────────────
 const START_WEIGHT = 136;
 const GOAL_WEIGHT = 100;
 const TOTAL_DAYS = 132;
@@ -307,28 +358,89 @@ const milestones = [
   {kg:36, eq:"目标达成！100kg！你做到了！",emoji:"🎉"},
 ];
 
-let logs = JSON.parse(localStorage.getItem('wl_logs') || '[]');
-let photos = JSON.parse(localStorage.getItem('wl_photos') || '[]');
-let startDate = localStorage.getItem('wl_startDate') || new Date().toISOString().split('T')[0];
-localStorage.setItem('wl_startDate', startDate);
+// ─── State ───────────────────────────────────────────────────
+let logs = [];
+let photos = [];
+let startDate = new Date().toISOString().split('T')[0];
 
-function getCurrentWeight(){
+function setSyncStatus(state, text) {
+  const dot = document.getElementById('syncDot');
+  dot.className = 'sync-dot ' + state;
+  document.getElementById('syncText').textContent = text;
+}
+
+// ─── Supabase sync ───────────────────────────────────────────
+async function syncAll() {
+  setSyncStatus('loading', '同步中...');
+  try {
+    // Load start date from config
+    const cfg = await sbGet('wl_config', 'key=eq.startDate&limit=1');
+    if (cfg && cfg.length > 0) {
+      startDate = cfg[0].value;
+    } else {
+      // Save start date
+      await sbUpsert('wl_config', {key: 'startDate', value: startDate});
+    }
+
+    // Load logs
+    const remoteLogs = await sbGet('wl_logs', 'order=date.asc');
+    logs = remoteLogs.map(r => ({date: r.date, weight: parseFloat(r.weight), diet: r.diet || '', exercise: r.exercise || ''}));
+
+    // Load photos
+    const remotePhotos = await sbGet('wl_photos', 'order=created_at.asc');
+    photos = remotePhotos.map(r => ({date: r.date, url: r.url}));
+
+    // Also save to localStorage as cache
+    localStorage.setItem('wl_logs', JSON.stringify(logs));
+    localStorage.setItem('wl_photos', JSON.stringify(photos));
+    localStorage.setItem('wl_startDate', startDate);
+
+    const now = new Date();
+    const timeStr = now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0');
+    setSyncStatus('ok', '已同步 · ' + timeStr);
+    updateAll();
+  } catch(e) {
+    console.error('Sync error:', e);
+    // Fallback to localStorage
+    logs = JSON.parse(localStorage.getItem('wl_logs') || '[]');
+    photos = JSON.parse(localStorage.getItem('wl_photos') || '[]');
+    startDate = localStorage.getItem('wl_startDate') || startDate;
+    setSyncStatus('err', '云端连接失败，使用本地数据');
+    updateAll();
+  }
+}
+
+// ─── Helpers ─────────────────────────────────────────────────
+function getCurrentWeight() {
   return logs.length === 0 ? START_WEIGHT : logs[logs.length-1].weight;
 }
 
-function getDaysElapsed(){
+function getDaysElapsed() {
   const start = new Date(startDate);
   const now = new Date();
-  return Math.min(Math.floor((now-start)/(1000*60*60*24)), TOTAL_DAYS);
+  return Math.min(Math.floor((now - start) / (1000*60*60*24)), TOTAL_DAYS);
 }
 
-function updateHeader(){
+function updateAll() {
+  updateHeader();
+  setMotivation();
+  renderMilestones();
+  renderMeals();
+  const active = document.querySelector('.panel.active');
+  if (active) {
+    const id = active.id.replace('panel-', '');
+    if (id === 'log') renderLog();
+    if (id === 'chart') renderChart();
+    if (id === 'photo') renderPhotos();
+  }
+}
+
+function updateHeader() {
   const cw = getCurrentWeight();
   const lost = +(START_WEIGHT - cw).toFixed(1);
   const remain = +(cw - GOAL_WEIGHT).toFixed(1);
   const daysLeft = Math.max(0, TOTAL_DAYS - getDaysElapsed());
-  const pct = Math.min(100, Math.max(0, (lost/TOTAL_LOSS)*100));
-
+  const pct = Math.min(100, Math.max(0, (lost / TOTAL_LOSS) * 100));
   document.getElementById('curWeightStat').textContent = cw.toFixed(1);
   document.getElementById('lostStat').textContent = lost.toFixed(1);
   document.getElementById('remainStat').textContent = remain > 0 ? remain.toFixed(1) : '0.0';
@@ -338,7 +450,7 @@ function updateHeader(){
   document.getElementById('progressLabel').textContent = '已减 ' + lost.toFixed(1) + ' kg（' + pct.toFixed(0) + '%）';
 }
 
-function setMotivation(){
+function setMotivation() {
   const idx = getDaysElapsed() % motivations.length;
   document.getElementById('motivationText').textContent = motivations[idx];
   const now = new Date();
@@ -346,26 +458,24 @@ function setMotivation(){
     now.getFullYear() + '年' + (now.getMonth()+1) + '月' + now.getDate() + '日 · 第' + (getDaysElapsed()+1) + '天';
 }
 
-function renderMilestones(){
+function renderMilestones() {
   const lost = START_WEIGHT - getCurrentWeight();
-  const html = milestones.map(m => {
+  document.getElementById('milestoneList').innerHTML = milestones.map(m => {
     const achieved = lost >= m.kg;
-    return '<div class="milestone-item ' + (achieved?'achieved':'') + '">' +
-      '<div class="milestone-check">' + (achieved?'✓':'·') + '</div>' +
+    return '<div class="milestone-item ' + (achieved ? 'achieved' : '') + '">' +
+      '<div class="milestone-check">' + (achieved ? '✓' : '·') + '</div>' +
       '<div class="milestone-info">' +
         '<div class="milestone-title">' + m.emoji + ' 减掉 ' + m.kg + ' kg</div>' +
         '<div class="milestone-eq">' + m.eq + '</div>' +
       '</div>' +
-      '<div class="milestone-badge">' + (achieved?'已达成':'未达成') + '</div>' +
+      '<div class="milestone-badge">' + (achieved ? '已达成' : '未达成') + '</div>' +
     '</div>';
   }).join('');
-  document.getElementById('milestoneList').innerHTML = html;
 }
 
-function renderMeals(){
+function renderMeals() {
   const base = (getDaysElapsed() % 5) * 3;
-  const todayMeals = [meals[base%meals.length], meals[(base+1)%meals.length], meals[(base+2)%meals.length]];
-  const html = todayMeals.map(m =>
+  document.getElementById('mealContent').innerHTML = [meals[base % meals.length], meals[(base+1) % meals.length], meals[(base+2) % meals.length]].map(m =>
     '<div class="meal-card">' +
       '<div class="meal-type">' + m.type + '</div>' +
       '<div class="meal-name">' + m.name + '</div>' +
@@ -373,22 +483,19 @@ function renderMeals(){
       '<div class="meal-cal">🔥 ' + m.cal + '</div>' +
     '</div>'
   ).join('');
-  document.getElementById('mealContent').innerHTML = html;
 }
 
-function renderLog(){
-  if(logs.length === 0){
+function renderLog() {
+  if (logs.length === 0) {
     document.getElementById('logHistory').innerHTML = '<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">还没有记录，快去「今日」页添加第一条吧！</div></div>';
     return;
   }
-  const html = [...logs].reverse().map((l, i, arr) => {
+  document.getElementById('logHistory').innerHTML = [...logs].reverse().map((l, i, arr) => {
     const prev = arr[i+1];
     let changeHtml = '';
-    if(prev){
+    if (prev) {
       const delta = +(l.weight - prev.weight).toFixed(1);
-      const cls = delta < 0 ? 'down' : 'up';
-      const sign = delta < 0 ? '' : '+';
-      changeHtml = '<span class="log-change ' + cls + '">' + sign + delta + 'kg</span>';
+      changeHtml = '<span class="log-change ' + (delta < 0 ? 'down' : 'up') + '">' + (delta < 0 ? '' : '+') + delta + 'kg</span>';
     }
     return '<div class="log-entry">' +
       '<div class="log-date">' + l.date + '</div>' +
@@ -397,85 +504,79 @@ function renderLog(){
       (l.exercise ? '<div class="log-detail">🏃 ' + l.exercise + '</div>' : '') +
     '</div>';
   }).join('');
-  document.getElementById('logHistory').innerHTML = html;
 }
 
 let wChart, dChart;
-function renderChart(){
-  if(logs.length === 0) return;
+function renderChart() {
+  if (logs.length === 0) return;
   const labels = logs.map(l => l.date.slice(5));
   const weights = logs.map(l => l.weight);
   const deltas = logs.map((l, i) => i === 0 ? 0 : +(l.weight - logs[i-1].weight).toFixed(1));
   const minW = Math.min(...weights, GOAL_WEIGHT) - 1;
   const maxW = Math.max(...weights, START_WEIGHT) + 1;
 
-  if(wChart) wChart.destroy();
+  if (wChart) wChart.destroy();
   wChart = new Chart(document.getElementById('weightChart'), {
     type: 'line',
-    data: {
-      labels,
-      datasets: [
-        {label:'实际体重', data:weights, borderColor:'#1D9E75', backgroundColor:'rgba(29,158,117,0.1)', tension:0.35, pointRadius:4, pointBackgroundColor:'#1D9E75', fill:true},
-        {label:'目标100kg', data:Array(weights.length).fill(GOAL_WEIGHT), borderColor:'#BA7517', borderDash:[5,4], pointRadius:0, tension:0}
-      ]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{
-        y:{min:minW, max:maxW, ticks:{callback:v=>v+'kg', font:{size:11}}},
-        x:{ticks:{font:{size:10}, maxRotation:45}}
-      }
-    }
+    data: {labels, datasets: [
+      {label:'实际体重', data:weights, borderColor:'#1D9E75', backgroundColor:'rgba(29,158,117,0.1)', tension:0.35, pointRadius:4, pointBackgroundColor:'#1D9E75', fill:true},
+      {label:'目标100kg', data:Array(weights.length).fill(GOAL_WEIGHT), borderColor:'#BA7517', borderDash:[5,4], pointRadius:0}
+    ]},
+    options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{min:minW, max:maxW, ticks:{callback:v=>v+'kg', font:{size:11}}}, x:{ticks:{font:{size:10}, maxRotation:45}}}}
   });
 
-  if(dChart) dChart.destroy();
+  if (dChart) dChart.destroy();
   dChart = new Chart(document.getElementById('deltaChart'), {
     type: 'bar',
-    data: {
-      labels,
-      datasets:[{label:'日变化', data:deltas, backgroundColor:deltas.map(d=>d<0?'rgba(29,158,117,0.7)':'rgba(226,75,74,0.6)'), borderRadius:4}]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{
-        y:{ticks:{callback:v=>v+'kg', font:{size:11}}},
-        x:{ticks:{font:{size:10}, maxRotation:45}}
-      }
-    }
+    data: {labels, datasets:[{label:'日变化', data:deltas, backgroundColor:deltas.map(d=>d<0?'rgba(29,158,117,0.7)':'rgba(226,75,74,0.6)'), borderRadius:4}]},
+    options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{ticks:{callback:v=>v+'kg', font:{size:11}}}, x:{ticks:{font:{size:10}, maxRotation:45}}}}
   });
 }
 
-function renderPhotos(){
+function renderPhotos() {
   const grid = document.getElementById('photoGrid');
-  if(photos.length === 0){
+  if (photos.length === 0) {
     grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty-icon">📷</div><div class="empty-text">还没有照片，记录下你的蜕变旅程吧！</div></div>';
     return;
   }
   grid.innerHTML = photos.slice(-9).map(p =>
-    '<div class="photo-cell"><img src="' + p.url + '" alt="' + p.date + '"></div>'
+    '<div class="photo-cell"><img src="' + p.url + '" alt="' + p.date + '"><div class="photo-date">' + p.date.slice(5) + '</div></div>'
   ).join('');
 }
 
-function saveLog(){
+// ─── Save log ────────────────────────────────────────────────
+async function saveLog() {
   const w = parseFloat(document.getElementById('inputWeight').value);
   const diet = document.getElementById('inputDiet').value.trim();
   const exercise = document.getElementById('inputExercise').value.trim();
-  if(!w || w < 40 || w > 300){ alert('请输入合理的体重（40~300kg）'); return; }
+  if (!w || w < 40 || w > 300) { alert('请输入合理的体重（40~300kg）'); return; }
+
+  const btn = document.getElementById('saveBtn');
+  btn.disabled = true;
+  btn.textContent = '保存中...';
 
   const today = new Date().toISOString().split('T')[0];
   const prevWeight = logs.length > 0 ? logs[logs.length-1].weight : START_WEIGHT;
-  const existing = logs.findIndex(l => l.date === today);
-  const entry = {date:today, weight:w, diet, exercise};
+  const entry = {date: today, weight: w, diet, exercise};
 
-  if(existing >= 0) logs[existing] = entry;
-  else logs.push(entry);
+  try {
+    await sbUpsert('wl_logs', entry);
+    setSyncStatus('ok', '已同步 · 刚刚');
+  } catch(e) {
+    console.warn('Save to cloud failed, saving locally', e);
+    setSyncStatus('err', '云端保存失败，已存本地');
+  }
+
+  // Update local state
+  const existing = logs.findIndex(l => l.date === today);
+  if (existing >= 0) logs[existing] = entry; else logs.push(entry);
   localStorage.setItem('wl_logs', JSON.stringify(logs));
 
   document.getElementById('inputWeight').value = '';
   document.getElementById('inputDiet').value = '';
   document.getElementById('inputExercise').value = '';
+  btn.disabled = false;
+  btn.textContent = '保存今日记录 ✓';
 
   updateHeader();
   renderLog();
@@ -483,52 +584,97 @@ function saveLog(){
 
   const totalLost = +(START_WEIGHT - w).toFixed(1);
   const newMilestone = milestones.find(m => totalLost >= m.kg && (START_WEIGHT - prevWeight) < m.kg);
-  if(newMilestone){
+  if (newMilestone) {
     showAchievement('🎉 里程碑达成！已减 ' + newMilestone.kg + 'kg！' + newMilestone.emoji + ' ' + newMilestone.eq);
   } else {
-    showAchievement('✓ 记录成功！今日体重 ' + w.toFixed(1) + 'kg，累计减掉 ' + totalLost.toFixed(1) + 'kg！');
+    showAchievement('✓ 记录成功！今日 ' + w.toFixed(1) + 'kg，累计减 ' + totalLost.toFixed(1) + 'kg！');
   }
 }
 
-function showAchievement(msg){
+// ─── Photo upload ────────────────────────────────────────────
+async function handlePhoto(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const btn = document.getElementById('photoBtn');
+  btn.disabled = true;
+  btn.textContent = '上传中...';
+
+  const reader = new FileReader();
+  reader.onload = async ev => {
+    const today = new Date().toISOString().split('T')[0];
+    // Compress image to keep Supabase row size reasonable
+    const compressed = await compressImage(ev.target.result, 800);
+    const entry = {date: today, url: compressed};
+
+    try {
+      await sbInsert('wl_photos', entry);
+      setSyncStatus('ok', '照片已同步 · 刚刚');
+    } catch(err) {
+      console.warn('Photo upload failed', err);
+      setSyncStatus('err', '照片云端保存失败，已存本地');
+    }
+
+    photos.push(entry);
+    if (photos.length > 60) photos = photos.slice(-60);
+    localStorage.setItem('wl_photos', JSON.stringify(photos));
+    renderPhotos();
+    showAchievement('📷 照片记录成功！继续加油！');
+    btn.disabled = false;
+    btn.textContent = '添加今日照片 +';
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+}
+
+function compressImage(dataUrl, maxSize) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      let w = img.width, h = img.height;
+      if (w > maxSize || h > maxSize) {
+        if (w > h) { h = Math.round(h * maxSize / w); w = maxSize; }
+        else { w = Math.round(w * maxSize / h); h = maxSize; }
+      }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      resolve(canvas.toDataURL('image/jpeg', 0.75));
+    };
+    img.src = dataUrl;
+  });
+}
+
+// ─── UI helpers ──────────────────────────────────────────────
+function showAchievement(msg) {
   const el = document.getElementById('achievePopup');
   el.textContent = msg;
   el.classList.add('show');
   setTimeout(() => el.classList.remove('show'), 3500);
 }
 
-function handlePhoto(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const today = new Date().toISOString().split('T')[0];
-    photos.push({date:today, url:ev.target.result});
-    if(photos.length > 30) photos = photos.slice(-30);
-    localStorage.setItem('wl_photos', JSON.stringify(photos));
-    renderPhotos();
-    showAchievement('📷 照片记录成功！继续加油！');
-  };
-  reader.readAsDataURL(file);
-  e.target.value = '';
-}
-
-function switchTab(tab){
+function switchTab(tab) {
   const tabs = ['today','log','chart','milestone','meal','photo'];
   document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', tabs[i] === tab));
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.getElementById('panel-' + tab).classList.add('active');
-  if(tab === 'chart') setTimeout(renderChart, 100);
-  if(tab === 'log') renderLog();
-  if(tab === 'photo') renderPhotos();
+  if (tab === 'chart') setTimeout(renderChart, 100);
+  if (tab === 'log') renderLog();
+  if (tab === 'photo') renderPhotos();
 }
 
-// Init
-updateHeader();
-setMotivation();
-renderMilestones();
-renderMeals();
-renderPhotos();
+// ─── Init ────────────────────────────────────────────────────
+// Load from localStorage first for instant render
+logs = JSON.parse(localStorage.getItem('wl_logs') || '[]');
+photos = JSON.parse(localStorage.getItem('wl_photos') || '[]');
+startDate = localStorage.getItem('wl_startDate') || startDate;
+updateAll();
+
+// Then sync from cloud
+syncAll();
+
+// Auto-sync every 5 minutes
+setInterval(syncAll, 5 * 60 * 1000);
 </script>
 </body>
 </html>
