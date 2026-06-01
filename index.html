@@ -338,7 +338,25 @@ const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZ
 const SB_H={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=representation'};
 
 async function sbGet(t,p){const r=await fetch(SB_URL+'/rest/v1/'+t+'?'+(p||'order=date.asc'),{headers:SB_H});if(!r.ok)throw new Error(await r.text());return r.json();}
-async function sbUpsert(t,d){const r=await fetch(SB_URL+'/rest/v1/'+t,{method:'POST',headers:{...SB_H,'Prefer':'resolution=merge-duplicates,return=representation'},body:JSON.stringify(d)});if(!r.ok)throw new Error(await r.text());return r.json();}
+async function sbUpsert(t,d){
+  // Try PATCH first (update existing row by date), then POST if not found
+  const patchRes=await fetch(SB_URL+'/rest/v1/'+t+'?date=eq.'+encodeURIComponent(d.date),{
+    method:'PATCH',
+    headers:{...SB_H,'Prefer':'return=representation'},
+    body:JSON.stringify(d)
+  });
+  if(!patchRes.ok){const e=await patchRes.text();throw new Error('PATCH failed: '+e);}
+  const patched=await patchRes.json();
+  if(patched&&patched.length>0) return patched; // updated existing row
+  // Row didn't exist yet — insert it
+  const postRes=await fetch(SB_URL+'/rest/v1/'+t,{
+    method:'POST',
+    headers:SB_H,
+    body:JSON.stringify(d)
+  });
+  if(!postRes.ok){const e=await postRes.text();throw new Error('POST failed: '+e);}
+  return postRes.json();
+}
 async function sbInsert(t,d){const r=await fetch(SB_URL+'/rest/v1/'+t,{method:'POST',headers:SB_H,body:JSON.stringify(d)});if(!r.ok)throw new Error(await r.text());return r.json();}
 
 const START_WEIGHT=136,GOAL_WEIGHT=100,TOTAL_DAYS=132,TOTAL_LOSS=36;
