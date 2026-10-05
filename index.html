@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>152天减重90计划</title>
+<title>减重90计划</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -80,20 +80,23 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
 .cal-cell:hover:not(.empty):not(.out-of-range):not(.has-log):not(.plan-cell){background:var(--surface2);}
 .cal-cell.empty,.cal-cell.out-of-range{cursor:default;}
 .cal-cell.out-of-range{opacity:0.3;}
-.cal-cell.today{border-color:var(--green-mid) !important;border-width:1.5px !important;}
-.cal-cell.has-log{background:#1e3d10;border-color:#3a6e1a;}
-@media(prefers-color-scheme:light){.cal-cell.has-log{background:#d4edbe;border-color:#8ec95a;}}
-.cal-cell.plan-cell{background:rgba(186,117,23,0.18);border-color:rgba(186,117,23,0.35);}
-@media(prefers-color-scheme:light){.cal-cell.plan-cell{background:rgba(186,117,23,0.08);border-color:rgba(186,117,23,0.2);}}
+.cal-cell.today{border-color:#3a9e55 !important;border-width:2px !important;}
+.cal-cell.plan-cell{background:rgba(186,117,23,0.15);border-color:rgba(186,117,23,0.35);}
 .cal-cell.selected{outline:2px solid var(--green);outline-offset:-2px;}
+/* 通用子元素样式 — 放在 has-log 覆盖之前 */
 .cal-day-num{font-size:12px;font-weight:500;color:var(--text2);line-height:1;margin-top:2px;}
-.cal-cell.today .cal-day-num{color:var(--green);font-weight:700;}
-.cal-cell.has-log .cal-day-num{color:#7ecb4a;}
-.cal-weight{font-size:11px;font-weight:700;color:#7ecb4a;margin-top:3px;line-height:1;}
+.cal-cell.today:not(.has-log) .cal-day-num{color:var(--green);font-weight:700;}
+.cal-weight{font-size:11px;font-weight:700;color:#2d6e0a;margin-top:3px;line-height:1;}
 .cal-change{font-size:9px;margin-top:2px;line-height:1;font-weight:500;}
 .cal-change.up{color:#E24B4A;}
-.cal-change.down{color:var(--green-mid);}
-.cal-plan-w{font-size:9px;color:#e8a030;margin-top:3px;line-height:1.2;text-align:center;}
+.cal-change.down{color:#3a7018;}
+.cal-plan-w{font-size:9px;color:var(--amber);margin-top:3px;line-height:1.2;text-align:center;}
+/* has-log 样式 — 必须在通用规则之后，优先级更高 */
+.cal-cell.has-log{background:#4a8c22 !important;border-color:#3a7018 !important;}
+.cal-cell.has-log .cal-day-num{color:#fff !important;font-weight:700 !important;}
+.cal-cell.has-log .cal-weight{color:#fff !important;font-weight:700 !important;}
+.cal-cell.has-log .cal-change{color:#c8ffb0 !important;}
+.cal-cell.has-log .cal-change.up{color:#ffb3b3 !important;}
 
 .cal-detail{background:var(--surface2);border-radius:12px;padding:1rem 1.25rem;margin-top:4px;border:0.5px solid var(--border);display:none;}
 .cal-detail.show{display:block;}
@@ -187,7 +190,7 @@ textarea.form-input{resize:vertical;min-height:70px;}
         <div class="header-title">💪 减重90计划</div>
         <div class="header-sub">从 122kg 出发 → 目标 90kg</div>
       </div>
-      <div class="countdown-badge" id="countdownBadge">剩余 152 天</div>
+      <div class="countdown-badge" id="countdownBadge">计算中...</div>
     </div>
     <div>
       <div class="progress-labels">
@@ -216,7 +219,7 @@ textarea.form-input{resize:vertical;min-height:70px;}
       </div>
     </div>
     <div class="countdown-timer">
-      <div class="timer-block"><div class="timer-num" id="timerDays">152</div><div class="timer-label">天</div></div>
+      <div class="timer-block"><div class="timer-num" id="timerDays">—</div><div class="timer-label">天</div></div>
       <div class="timer-block"><div class="timer-num" id="timerHours">00</div><div class="timer-label">时</div></div>
       <div class="timer-block"><div class="timer-num" id="timerMins">00</div><div class="timer-label">分</div></div>
       <div class="timer-block"><div class="timer-num" id="timerSecs">00</div><div class="timer-label">秒</div></div>
@@ -280,7 +283,7 @@ textarea.form-input{resize:vertical;min-height:70px;}
       </div>
       <div class="cal-grid" id="calGrid"></div>
       <div class="cal-legend">
-        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--green-light);border:1px solid #C0DD97;"></div>已记录体重</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#4a8c22;border:1px solid #3a7018;"></div>已记录体重</div>
         <div class="cal-legend-item"><div class="cal-legend-dot" style="border:1.5px solid var(--green-mid);background:transparent;"></div>今天</div>
         <div class="cal-legend-item"><div class="cal-legend-dot" style="background:rgba(186,117,23,0.1);border:1px solid rgba(186,117,23,0.3);"></div>计划目标</div>
       </div>
@@ -361,7 +364,12 @@ async function sbUpsert(t,d){
 }
 async function sbInsert(t,d){const r=await fetch(SB_URL+'/rest/v1/'+t,{method:'POST',headers:SB_H,body:JSON.stringify(d)});if(!r.ok)throw new Error(await r.text());return r.json();}
 
-const START_WEIGHT=122,GOAL_WEIGHT=90,TOTAL_DAYS=152,TOTAL_LOSS=32;
+const START_WEIGHT=122,GOAL_WEIGHT=90,TOTAL_LOSS=32;
+const END_DATE='2027-03-05';
+function getTotalDays(){
+  const s=new Date(startDate+'T00:00:00'),e=new Date(END_DATE+'T00:00:00');
+  return Math.max(1,Math.round((e-s)/86400000));
+}
 
 const motivations=["每减掉1公斤，就是对自己最好的礼物。你值得更好的自己！","坚持是最好的天赋。今天的汗水，是明天轻盈的翅膀。","不是每天都会有惊喜，但每天都值得努力。继续！","减肥不是惩罚，而是对身体的爱护和尊重。","你已经走过了最难的那一步——开始。接下来只管前进。","32公斤，分成每一天，只需今天比昨天好一点点。","想象穿上帅气的衣服、轻松爬楼梯的那一天，就在眼前。","每一口克制，每一步运动，都是存入健康账户的储蓄。","身体在悄悄改变，即使秤上看不出来，内在已经在变好。","你选择了一条很多人不敢走的路，这本身已经很了不起。","少吃一块蛋糕，多走十分钟，日积月累，便是奇迹。","困难的事情往往最值得做。你在做一件终身受益的事。","今天的坚持，是未来的你感谢现在的你的理由。","体重只是一个数字，但你正在重建的是整个生命状态。","喝足水、睡好觉、动起来——简单的三件事，威力巨大。","想象一下90kg那天的感受！那一天正在向你靠近。","减肥最大的敌人是放弃，而你今天打卡，就已经赢了。","平台期也是进步，身体在悄悄重组，请相信这个过程。","一碗牛肉面，不如一碗杂蔬汤——选择，就是力量。","你比你想象的更有韧性，比你以为的更接近成功。","每天清晨睁开眼，你又比昨天离目标近了一步！","减肥路上不比速度，只比谁坚持得更久。你会赢。","记录本身就是一种自律的力量，今天你做到了。","水是最好的减脂伙伴，每天喝够2升，身体感谢你。","你的身体记得每一次努力，即使大脑觉得没什么变化。","把减肥当成爱好，而不是任务，快乐会加速成功。","今天的你，比一个月前的你更强壮，也更勇敢。","不完美的坚持，胜过完美的放弃。继续打卡！"];
 
@@ -373,7 +381,7 @@ let logs=[],photos=[],startDate=new Date().toISOString().split('T')[0];
 let calYear,calMonth,calSelected=null;
 
 // ── Countdown timer ──
-function getEndDate(){return new Date('2027-03-05T23:59:59');}
+function getEndDate(){return new Date(END_DATE+'T23:59:59');}
 function tickTimer(){
   const now=new Date(),end=getEndDate();
   let diff=Math.max(0,end-now);
@@ -417,9 +425,9 @@ async function syncAll(){
 }
 
 function getCurWeight(){return logs.length===0?START_WEIGHT:logs[logs.length-1].weight;}
-function getDaysElapsed(){const s=new Date(startDate),n=new Date();return Math.min(Math.max(0,Math.floor((n-s)/86400000)),TOTAL_DAYS);}
+function getDaysElapsed(){const s=new Date(startDate),n=new Date();return Math.min(Math.max(0,Math.floor((n-s)/86400000)),getTotalDays());}
 function logMap(){const m={};logs.forEach(l=>m[l.date]=l);return m;}
-function plannedWeight(dayIdx){return +(START_WEIGHT-(TOTAL_LOSS/TOTAL_DAYS)*dayIdx).toFixed(1);}
+function plannedWeight(dayIdx){return +(START_WEIGHT-(TOTAL_LOSS/getTotalDays())*dayIdx).toFixed(1);}
 
 function updateAll(){
   updateHeader();setMotivation();renderMilestones();renderMeals();
@@ -473,7 +481,7 @@ function renderCalendar(){
     const ds=calYear+'-'+String(calMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
     const cellDate=new Date(calYear,calMonth,d);
     const dayIdx=Math.round((cellDate-startD)/86400000);
-    const inRange=dayIdx>=0&&dayIdx<=TOTAL_DAYS;
+    const inRange=cellDate>=startD&&cellDate<=endD;
     const isToday=ds===today;
     const hasLog=!!map[ds];
     const isSel=ds===calSelected;
